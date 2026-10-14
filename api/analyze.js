@@ -11,8 +11,8 @@ export default async function handler(req, res) {
         });
     }
 
-    // 💡 แก้ไขชื่อโมเดลเป็น gemini-1.5-pro-latest ให้ถูกต้องตามที่ Google กำหนด
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${API_KEY}`;
+    // 💡 กลับมาใช้รุ่น gemini-1.5-flash ตัวมาตรฐานที่รองรับกับทุกคีย์ฟรี
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
     try {
         const response = await fetch(url, {
