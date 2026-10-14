@@ -1,4 +1,4 @@
-/* StockLens Booji v3 — vanilla JS, Vercel serverless API + official TradingView embeds */
+/* StockLens Booji v4 — readable Thai-first market research dashboard */
 const $ = (id) => document.getElementById(id);
 const today = new Date();
 $('todayLabel').textContent = today.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -101,43 +101,73 @@ function mountTickerTape() {
       {proName:'NASDAQ:MSFT',title:'Microsoft'},
       {proName:'NYSE:KO',title:'Coca-Cola'},
       {proName:'SET:PTT',title:'PTT'}
-    ], showSymbolLogo:true, colorTheme:'light', isTransparent:true, displayMode:'adaptive', locale:'en'
+    ], showSymbolLogo:true, colorTheme:'light', isTransparent:true, displayMode:'adaptive', locale:'th_TH'
   }, 44, false);
   const wrapper = $('tickerTape').querySelector('.tradingview-widget-container');
   if (wrapper) wrapper.style.minHeight = '44px';
 }
 function mountEconomicCalendar() {
   mountWidget('economicCalendarWidget', 'embed-widget-events.js', {
-    colorTheme:'light', isTransparent:true, locale:'en',
+    colorTheme:'light', isTransparent:true, locale:'th_TH',
     countryFilter:'au,ca,cn,de,eu,gb,id,in,it,jp,kr,th,us',
     importanceFilter:'-1,0,1', width:'100%', height:'500'
   }, 500);
 }
+function mountAssetFlowWidget() {
+  mountWidget('assetFlowWidget', 'embed-widget-market-overview.js', {
+    colorTheme:'light', isTransparent:false, locale:'th_TH', dateRange:'1D',
+    showFloatingTooltip:false, showChart:true, width:'100%', height:480,
+    tabs:[
+      {title:'หุ้น / รับความเสี่ยง',symbols:[
+        {s:'AMEX:SPY',d:'ETF หุ้นสหรัฐฯ'},
+        {s:'NASDAQ:QQQ',d:'ETF หุ้นเทคโนโลยี'},
+        {s:'AMEX:IWM',d:'หุ้นสหรัฐฯ ขนาดเล็ก'},
+        {s:'NASDAQ:SMH',d:'ETF เซมิคอนดักเตอร์'}
+      ]},
+      {title:'สินทรัพย์ทางเลือก',symbols:[
+        {s:'AMEX:GLD',d:'ETF ทองคำ'},
+        {s:'NASDAQ:TLT',d:'ETF พันธบัตรระยะยาว'},
+        {s:'AMEX:UUP',d:'ETF ดอลลาร์สหรัฐฯ'},
+        {s:'AMEX:USO',d:'ETF น้ำมัน'},
+        {s:'BINANCE:BTCUSDT',d:'Bitcoin'},
+        {s:'SET:SET',d:'ดัชนี SET'}
+      ]}
+    ]
+  }, 480);
+}
+
+function mountMarketTopStories() {
+  mountWidget('marketTopStoriesWidget', 'embed-widget-timeline.js', {
+    feedMode:'all_symbols', colorTheme:'light', isTransparent:true,
+    displayMode:'regular', width:'100%', height:480, locale:'th_TH'
+  }, 480);
+}
+
 function mountStockWidgets(symbol) {
   updateSourceLinks(symbol);
   mountWidget('symbolInfoWidget', 'embed-widget-symbol-info.js', {
-    symbol, width:'100%', colorTheme:'light', isTransparent:true, locale:'en'
+    symbol, width:'100%', colorTheme:'light', isTransparent:true, locale:'th_TH'
   }, 185);
   mountWidget('advancedChartWidget', 'embed-widget-advanced-chart.js', {
-    autosize:true, symbol, interval:'D', timezone:'Asia/Bangkok', theme:'light', style:'1', locale:'en',
+    autosize:true, symbol, interval:'D', timezone:'Asia/Bangkok', theme:'light', style:'1', locale:'th_TH',
     allow_symbol_change:true, calendar:false, support_host:'https://www.tradingview.com',
     withdateranges:true, details:true, hotlist:true, hide_side_toolbar:false, save_image:false,
     studies:['Volume@tv-basicstudies','MASimple@tv-basicstudies'], width:'100%', height:570
   }, 570);
   mountWidget('technicalWidget', 'embed-widget-technical-analysis.js', {
     interval:'1D', width:'100%', isTransparent:true, height:450, symbol,
-    showIntervalTabs:true, displayMode:'multiple', locale:'en', colorTheme:'light'
+    showIntervalTabs:true, displayMode:'multiple', locale:'th_TH', colorTheme:'light'
   }, 450);
   mountWidget('companyProfileWidget', 'embed-widget-symbol-profile.js', {
-    width:'100%', height:300, colorTheme:'light', isTransparent:true, symbol, locale:'en'
+    width:'100%', height:300, colorTheme:'light', isTransparent:true, symbol, locale:'th_TH'
   }, 300);
   mountWidget('financialsWidget', 'embed-widget-financials.js', {
     symbol, colorTheme:'light', isTransparent:true, displayMode:'adaptive',
-    width:'100%', height:500, locale:'en'
+    width:'100%', height:500, locale:'th_TH'
   }, 500);
   mountWidget('newsWidget', 'embed-widget-timeline.js', {
     feedMode:'symbol', symbol, colorTheme:'light', isTransparent:true,
-    displayMode:'regular', width:'100%', height:460, locale:'en'
+    displayMode:'regular', width:'100%', height:460, locale:'th_TH'
   }, 460);
 }
 
@@ -199,7 +229,7 @@ ${evidence || '(ผู้ใช้ยังไม่ได้ให้ตัว�
   "investorFit": "...",
   "dataNote": "ระบุว่าข้อมูลตัวเลขใดมาจากผู้ใช้ และข้อมูลใดควรตรวจจากวิดเจ็ตภายนอก ห้ามอ้างแหล่งที่ไม่ได้เปิดดู"
 }
-แต่ละหัวข้อควรมีรายละเอียดที่นำไปใช้คิดต่อได้ ไม่ใช่คำโฆษณาหรือคำตอบกำปั้นทุบดิน หากไม่แน่ใจในข้อเท็จจริงเฉพาะบริษัท ให้บอกว่าเป็นประเด็นที่ควรตรวจสอบแทนการเดา`;
+เขียนเป็นภาษาไทยธรรมชาติ โดยศัพท์อังกฤษให้ใส่คำแปลไทยครั้งแรกเท่านั้น แต่ละช่อง 1-3 ประโยค กระชับ อ่านง่าย และเริ่มจากข้อสรุปก่อน ห้ามเขียนยาวซ้ำซ้อน ห้ามใช้ตัวเลขที่ไม่อยู่ในข้อมูลที่ให้มา หากไม่แน่ใจเรื่องบริษัทเฉพาะ ให้เขียนว่าเป็นประเด็นที่ต้องตรวจสอบแทนการเดา`;
 }
 function asText(value, fallback='') {
   if (Array.isArray(value)) return value.map(x => String(x ?? '')).filter(Boolean).join('\n');
@@ -263,7 +293,14 @@ function renderReport(data, ticker, tvSymbol, evidenceProvided) {
     block('หุ้นนี้เหมาะกับนักลงทุนแบบไหน?','👤',data.investorFit,true),
     block('ขอบเขตของข้อมูล','🔎',data.dataNote,true)
   ].join('');
-  $('analysisCard').innerHTML = `<div class="ai-output"><div class="ai-banner"><span class="badge">🐱 Booji Research Brief</span><span class="badge tag">${escapeHtml(ticker)} · ${escapeHtml($('analysisHorizon').value)}</span><span class="micro-label">สร้างเมื่อ ${new Date().toLocaleString('th-TH')}</span></div><div class="report-grid">${sections}</div><div class="ai-disclaimer"><b>อ่านให้ถูก:</b> ข้อความนี้เป็นคำอธิบายเชิงคุณภาพจาก AI ไม่ใช่ข้อมูลตลาดสด ตัวเลขที่คุณกรอก: ${evidenceProvided ? 'มี — ตรวจวัน/หน่วย/งวดที่มาของตัวเลขด้วย' : 'ไม่มี — โปรดอ่านค่าจริงจาก TradingView widgets บนหน้านี้ก่อนตัดสินใจ'}. กราฟและข้อมูลพื้นฐานแสดงจากวิดเจ็ตภายนอกและอาจล่าช้าตามสิทธิ์ข้อมูลของตลาด · ไม่ใช่คำแนะนำซื้อขาย</div></div>`;
+  const riskSummary = Array.isArray(data.risks) ? data.risks.slice(0, 2).join(' ') : asText(data.risks, 'ตรวจสอบความเสี่ยงก่อนตัดสินใจ');
+  const quickSummary = [
+    {title:'ภาพรวมธุรกิจ',text:asText(company.businessModel || data.A_CompanyProfile || thesis.baseCase,'ดูโมเดลธุรกิจและแหล่งรายได้ของบริษัท')},
+    {title:'การเงินแบบภาษาคน',text:asText(financials.beginnerVerdict || financials.revenue || data.C_Financial,'เทียบรายได้ กำไร และเงินสดหลายงวดจากข้อมูลจริง')},
+    {title:'ความเสี่ยงที่ต้องจำ',text:riskSummary}
+  ];
+  const quickCards = quickSummary.map((item,index)=>`<article class="quick-read-card"><h3>${['🧭','💵','⚠️'][index]} ${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join('');
+  $('analysisCard').innerHTML = `<div class="ai-output"><div class="ai-banner"><span class="badge">🐱 Booji · สรุปอ่านเร็ว</span><span class="badge tag">${escapeHtml(ticker)} · ${escapeHtml($('analysisHorizon').value)}</span><span class="micro-label">สร้างเมื่อ ${new Date().toLocaleString('th-TH')}</span></div><div class="quick-read-grid">${quickCards}</div><details class="full-report-details"><summary>อ่านบทวิเคราะห์ฉบับละเอียด (กรณีบวก/ฐาน/ลบ, งบ, มูลค่า, ความเสี่ยง)</summary><div class="report-grid">${sections}</div></details><div class="ai-disclaimer"><b>ขอบเขตข้อมูล:</b> ${evidenceProvided ? 'ใช้ตัวเลขที่คุณใส่มาประกอบ ต้องตรวจหน่วยและงวดรายงานอีกครั้ง' : 'ไม่ได้รับตัวเลขงบจากคุณ AI จึงอธิบายกรอบคิดและสิ่งที่ควรตรวจ ไม่ได้สรุปตัวเลขงบล่าสุด'}. ราคาและงบจริงต้องอ้างอิงวิดเจ็ต/แหล่งข่าวที่เปิดดูได้ · ไม่ใช่คำแนะนำซื้อขาย</div></div>`;
 }
 
 async function analyze() {
@@ -278,6 +315,7 @@ async function analyze() {
   $('errorText').classList.add('hidden');
   const tvSymbol = getTvSymbol(ticker,market); activeSymbol = tvSymbol;
   mountStockWidgets(tvSymbol);
+  refreshDailyNews(ticker, market);
   try {
     const response = await fetch('/api/analyze', {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -300,6 +338,129 @@ async function analyze() {
     $('errorText').textContent = `วิเคราะห์ไม่สำเร็จ: ${error.message}\n\nกราฟและวิดเจ็ต TradingView ยังคงใช้งานแยกจาก AI ได้ ลองเปิดจากลิงก์ TradingView หรือเช็กการตั้งค่า GEMINI_API_KEY บน Vercel`;
     $('errorText').classList.remove('hidden');
   } finally { btn.disabled = false; $('btnText').innerHTML = oldText; }
+}
+
+function relativeTime(iso) {
+  if (!iso) return 'เวลาไม่ระบุ';
+  const minutes = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 60000));
+  if (minutes < 60) return `${Math.max(minutes, 1)} นาทีที่แล้ว`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} ชม.ที่แล้ว`;
+  return `${Math.floor(hours / 24)} วันที่แล้ว`;
+}
+function renderNewsItems(containerId, items, emptyText) {
+  const container = $(containerId);
+  if (!container) return;
+  if (!Array.isArray(items) || !items.length) {
+    container.innerHTML = `<div class="news-empty">${escapeHtml(emptyText)}<br><a href="https://news.google.com/" target="_blank" rel="noopener noreferrer">เปิด Google News ↗</a></div>`;
+    return;
+  }
+  container.innerHTML = items.map(item => {
+    const date = item.publishedAt ? relativeTime(item.publishedAt) : 'ข่าวล่าสุด';
+    return `<a class="news-item" href="${escapeHtml(item.link)}" target="_blank" rel="noopener noreferrer"><div class="news-item-title">${escapeHtml(item.title)}</div><div class="news-item-meta"><span class="news-item-source">${escapeHtml(item.source || 'แหล่งข่าว')}</span><span>${escapeHtml(date)} · อ่านต้นฉบับ ↗</span></div></a>`;
+  }).join('');
+}
+async function refreshTickerNews(ticker, market) {
+  $('newsTickerLabel').textContent = ticker;
+  const feed = $('dailyNewsFeed');
+  feed.innerHTML = '<div class="news-loading">กำลังค้นหาข่าวในช่วง 1 วันล่าสุด…</div>';
+  try {
+    const response = await fetch(`/api/news?symbol=${encodeURIComponent(ticker)}&market=${encodeURIComponent(market)}`);
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) throw new Error(payload.error || 'ฟีดข่าวไม่พร้อมใช้งาน');
+    renderNewsItems('dailyNewsFeed', payload.items, `ยังไม่พบข่าวที่ตรงกับ ${ticker} ในฟีดช่วงนี้`);
+  } catch (error) {
+    renderNewsItems('dailyNewsFeed', [], `ดึงข่าวของ ${ticker} ไม่สำเร็จ (${error.message})`);
+  }
+}
+async function refreshMarketNews(market) {
+  const target = $('marketTopStoriesWidget');
+  if (target) {
+    // TradingView's Top Stories widget presents the market-wide news feed.
+    // Keep this separated from ticker-specific headlines above.
+    mountMarketTopStories();
+  }
+}
+function refreshDailyNews(ticker = plainTicker(), market = $('market').value) {
+  refreshTickerNews(ticker, market);
+  refreshMarketNews(market);
+}
+
+function toNumber(id) {
+  const raw = $(id)?.value.trim();
+  if (raw === '' || raw == null) return null;
+  const number = Number(raw);
+  return Number.isFinite(number) ? number : null;
+}
+function numberLabel(n) {
+  if (n == null) return '—';
+  return new Intl.NumberFormat('th-TH', { maximumFractionDigits: 2 }).format(n);
+}
+function financeMetric(metric) {
+  const previous = toNumber(`${metric}Prev`);
+  const current = toNumber(`${metric}Now`);
+  if (previous == null || current == null) return null;
+  const maxAbs = Math.max(Math.abs(previous), Math.abs(current), 1e-9);
+  const oldWidth = Math.max(0, Math.min(100, Math.abs(previous) / maxAbs * 100));
+  const newWidth = Math.max(0, Math.min(100, Math.abs(current) / maxAbs * 100));
+  let change;
+  let changeClass = 'neutral';
+  let text;
+  if (previous < 0 && current >= 0) { change = 'พลิกจากติดลบเป็นบวก'; changeClass = 'positive'; text = change; }
+  else if (previous > 0 && current < 0) { change = 'พลิกจากบวกเป็นติดลบ'; changeClass = 'negative'; text = change; }
+  else if (previous !== 0) {
+    const pct = (current - previous) / Math.abs(previous) * 100;
+    change = `${pct > 0 ? '+' : ''}${pct.toFixed(1)}%`;
+    changeClass = pct > 1 ? 'positive' : pct < -1 ? 'negative' : 'neutral';
+    text = `${pct > 1 ? 'เพิ่มขึ้น' : pct < -1 ? 'ลดลง' : 'ใกล้เคียงเดิม'} ${change}`;
+  } else {
+    change = current === 0 ? 'ยังเท่าเดิม' : 'เริ่มมีตัวเลขจากฐานศูนย์';
+    changeClass = current > 0 ? 'positive' : current < 0 ? 'negative' : 'neutral'; text = change;
+  }
+  return { previous, current, oldWidth, newWidth, change, changeClass, text };
+}
+function drawFinanceComparison() {
+  const unit = $('financeUnit').value.trim() || 'หน่วยที่กรอก';
+  const prevLabel = $('financePeriodPrev').value.trim() || 'งวดก่อน';
+  const nowLabel = $('financePeriodNow').value.trim() || 'งวดล่าสุด';
+  $('financePrevLabel').textContent = prevLabel;
+  $('financeNowLabel').textContent = nowLabel;
+  const metrics = [
+    {id:'finRevenue',title:'รายได้รวม',icon:'📈'},
+    {id:'finProfit',title:'กำไรสุทธิ',icon:'💰'},
+    {id:'finCash',title:'เงินสดจากการดำเนินงาน',icon:'💧'}
+  ].map(m => ({...m,data:financeMetric(m.id)}));
+  const valid = metrics.filter(m => m.data);
+  if (!valid.length) {
+    $('financeChartSummary').innerHTML = '<div class="finance-empty">กรอกตัวเลขอย่างน้อยหนึ่งรายการทั้งงวดก่อนและงวดล่าสุด แล้วกด “สร้างกราฟและสรุป”</div>';
+    return;
+  }
+  const cards = valid.map(metric => {
+    const d = metric.data;
+    const prevNegative = d.previous < 0 ? 'negative' : '';
+    const nowNegative = d.current < 0 ? 'negative' : '';
+    return `<article class="finance-metric"><h4>${metric.icon} ${metric.title}</h4><div class="finance-change ${d.changeClass}">${escapeHtml(d.text)}</div><div class="finance-bar-row"><span>${escapeHtml(prevLabel)}</span><div class="finance-bar-track"><div class="finance-bar ${prevNegative}" style="width:${d.oldWidth}%"></div></div></div><div class="finance-value-row"><span>ค่าเดิม</span><b>${numberLabel(d.previous)} ${escapeHtml(unit)}</b></div><div class="finance-bar-row"><span>${escapeHtml(nowLabel)}</span><div class="finance-bar-track"><div class="finance-bar latest ${nowNegative}" style="width:${d.newWidth}%"></div></div></div><div class="finance-value-row"><span>ค่าล่าสุด</span><b>${numberLabel(d.current)} ${escapeHtml(unit)}</b></div></article>`;
+  }).join('');
+  const lookup = Object.fromEntries(valid.map(m => [m.id, m.data]));
+  const rev = lookup.finRevenue, profit = lookup.finProfit, cash = lookup.finCash;
+  const insights = [];
+  if (rev && profit) {
+    if (rev.current > rev.previous && profit.current > profit.previous) insights.push('รายได้และกำไรเพิ่มพร้อมกัน เป็นสัญญาณที่ดีขึ้นในสองตัวชี้วัดนี้ แต่ควรดูว่าส่วนต่างกำไรและรายการพิเศษเปลี่ยนหรือไม่');
+    else if (rev.current > rev.previous && profit.current <= profit.previous) insights.push('รายได้เพิ่มแต่กำไรไม่เพิ่มตาม อาจมีต้นทุนหรือค่าใช้จ่ายโตเร็วกว่ายอดขาย ควรเปิดดูอัตรากำไร');
+    else if (rev.current < rev.previous && profit.current > profit.previous) insights.push('รายได้ลดแต่กำไรเพิ่ม ควรตรวจว่าเกิดจากการลดต้นทุนชั่วคราว การขายสินทรัพย์ หรือรายการพิเศษหรือไม่');
+    else if (rev.current < rev.previous && profit.current < profit.previous) insights.push('ทั้งรายได้และกำไรลดลง ต้องหาสาเหตุว่าเป็นวัฏจักรตลาดหรือปัญหาเฉพาะธุรกิจ');
+    else insights.push('รายได้และกำไรเคลื่อนไหวไม่เหมือนกัน ควรตรวจค่าใช้จ่ายและอัตรากำไรประกอบ');
+  } else if (rev) insights.push(rev.current > rev.previous ? 'รายได้เพิ่มขึ้นเมื่อเทียบกับงวดก่อน ตรวจต่อว่าการเติบโตนี้เปลี่ยนเป็นกำไรและเงินสดได้หรือไม่' : 'รายได้ไม่เติบโตหรือหดตัว ควรอ่านคำอธิบายของฝ่ายบริหารประกอบ');
+  if (cash && profit) {
+    if (profit.current > profit.previous && cash.current < cash.previous) insights.push('กำไรดีขึ้นแต่เงินสดจากการดำเนินงานลดลง ควรตรวจลูกหนี้ สต็อกสินค้า และคุณภาพการแปลงกำไรเป็นเงินสด');
+    else if (cash.current > cash.previous) insights.push('เงินสดจากการดำเนินงานเพิ่มขึ้น เป็นข้อมูลอีกด้านที่ช่วยตรวจคุณภาพกำไร แต่ต้องดูว่ามีผลจากจังหวะรับ/จ่ายเงินหรือไม่');
+  }
+  if (!insights.length) insights.push('อ่านการเปลี่ยนแปลงร่วมกัน ไม่ควรตัดสินจากตัวเลขใดตัวเลขหนึ่ง และควรใช้ช่วงเวลาที่เทียบกันได้');
+  $('financeChartSummary').innerHTML = `<div class="finance-metrics-grid">${cards}</div><div class="finance-verdict"><h4>🐱 Booji แปลผลให้</h4><p>เปรียบเทียบ ${escapeHtml(prevLabel)} กับ ${escapeHtml(nowLabel)} โดยใช้หน่วย ${escapeHtml(unit)}:</p><ul>${insights.map(i=>`<li>${escapeHtml(i)}</li>`).join('')}</ul><p style="margin-top:8px;font-size:13px;color:#557568">สรุปจากตัวเลขที่ผู้ใช้กรอกเท่านั้น ตรวจงวดบัญชี สกุลเงิน และหน่วยให้ตรงกันก่อนนำไปใช้</p></div>`;
+}
+function clearFinanceComparison() {
+  ['finRevenuePrev','finRevenueNow','finProfitPrev','finProfitNow','finCashPrev','finCashNow'].forEach(id=>$(id).value='');
+  drawFinanceComparison();
 }
 
 // Editable what-if calculator: monthly compounding with contributions at the end of each month.
@@ -370,10 +531,16 @@ $('addWatchBtn').addEventListener('click',addWatchlist);
 $('clearEvidenceBtn').addEventListener('click',()=>{$('evidenceInput').value='';notify('ล้างตัวเลขที่วางแล้ว');});
 $('ticker').addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();analyze();}});
 ['initialCapital','monthlyContribution','projectionYears','referencePrice','bearRate','baseRate','bullRate'].forEach(id=>$(id).addEventListener('input',renderForecast));
-$('market').addEventListener('change',()=>{if(activeSymbol){mountStockWidgets(getTvSymbol());}});
+$('market').addEventListener('change',()=>{if(activeSymbol){const symbol=getTvSymbol();activeSymbol=symbol;mountStockWidgets(symbol);refreshDailyNews(plainTicker(),$('market').value);}});
 $('menuBtn').addEventListener('click',()=>{$('mainNav').classList.toggle('open');});
 document.querySelectorAll('#mainNav a').forEach(a=>a.addEventListener('click',()=>$('mainNav').classList.remove('open')));
 
-renderHistory(); renderWatchlist(); renderForecast(); setupChecklist(); mountTickerTape(); mountEconomicCalendar();
-// Load a starter symbol on initial view so the page is useful before requesting an AI report.
+renderHistory(); renderWatchlist(); renderForecast(); setupChecklist(); mountTickerTape(); mountEconomicCalendar(); mountAssetFlowWidget();
+$('refreshNewsBtn').addEventListener('click',()=>{refreshDailyNews(plainTicker(),$('market').value);notify('กำลังอัปเดตข่าวล่าสุด');});
+$('buildFinanceChartBtn').addEventListener('click',drawFinanceComparison);
+$('clearFinanceChartBtn').addEventListener('click',clearFinanceComparison);
+['financeUnit','financePeriodPrev','financePeriodNow','finRevenuePrev','finRevenueNow','finProfitPrev','finProfitNow','finCashPrev','finCashNow'].forEach(id=>$(id).addEventListener('change',()=>{ if(['finRevenuePrev','finRevenueNow','finProfitPrev','finProfitNow','finCashPrev','finCashNow'].some(k=>$(k).value.trim()!=='')) drawFinanceComparison(); }));
+// Load widgets and fresh headlines for a starter symbol before any AI analysis.
+mountMarketTopStories();
 mountStockWidgets(getTvSymbol('NVDA','US'));
+refreshDailyNews('NVDA','US');

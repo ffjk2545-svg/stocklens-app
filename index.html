@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0e3c31">
   <meta name="description" content="StockLens Booji — แดชบอร์ดวิเคราะห์หุ้นที่ผสานกราฟ ข้อมูลงบ การอ่านความเสี่ยง และเครื่องมือจำลองสถานการณ์ลงทุน">
-  <title>StockLens Booji — ลงทุนด้วยข้อมูล ไม่ใช่เดา</title>
+  <title>StockLens Booji — อ่านตลาดง่ายขึ้นทุกวัน</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,6 +22,54 @@
     @media(max-width:1000px){.nav{gap:0}.nav a{padding:8px;font-size:11px}.top-right .today-label{display:none}.hero-side-note{display:none}.summary-grid{grid-template-columns:1fr}.beginner-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:760px){.shell{width:min(1380px,calc(100% - 22px))}.topbar-inner{min-height:64px}.nav{display:none;position:absolute;top:63px;left:0;right:0;padding:12px;background:#fff;border-bottom:1px solid var(--line);box-shadow:var(--shadow)}.nav.open{display:flex;flex-direction:column;align-items:stretch}.nav a{font-size:13px;padding:11px 14px}.mobile-menu{display:block}.top-right{margin-left:auto}.hero{padding:24px 18px;border-radius:22px;margin-top:14px}.hero h1{font-size:28px}.hero-copy{font-size:12px}.search-grid{grid-template-columns:1fr;gap:11px;margin-top:20px}.field input,.field select{min-height:45px;padding:11px 12px}.hero-actions{flex-direction:column}.hero-actions .btn{width:100%}.section{margin:25px 0}.section-head{align-items:flex-start;flex-direction:column;gap:6px}.widget-grid-2,.forecast-layout,.calendar-layout,.daily-grid{grid-template-columns:1fr}.chart-card .tv-widget{height:430px}.financial-card .tv-widget,.technical-card .tv-widget{height:420px}.news-card .tv-widget{height:420px}.calendar-card .tv-widget{height:440px}.scenario-cards{grid-template-columns:1fr}.scenario{display:grid;grid-template-columns:1fr auto;gap:0 10px}.scenario .scenario-value{grid-column:2;grid-row:1/3;align-self:center}.scenario .scenario-delta{margin-top:2px}.report-grid{grid-template-columns:1fr}.report-block.wide{grid-column:auto}.card-head{padding:17px 17px 0}.card-body,.forecast-controls,.forecast-results,.ai-output{padding:16px}.ai-placeholder{padding:16px}.control-grid{gap:10px}.source-strip{align-items:flex-start}.ticker-band .tv-ticker{height:42px}}
     @media(max-width:420px){.brand-title{font-size:16px}.brand-sub{font-size:9px}.brand-mark{height:36px;width:36px}.top-right{font-size:10px}.beginner-grid{grid-template-columns:1fr}.section-title{font-size:21px!important}.card{border-radius:17px}.search-grid{margin-top:17px}}
+
+    /* v4 readability and short-first experience */
+    body{font-size:16px;line-height:1.7}
+    .nav a{font-size:14px;padding:9px 10px}
+    .hero-copy{font-size:16px;line-height:1.75;max-width:780px}
+    .field label{font-size:15px}.field-hint{font-size:12px;line-height:1.6}
+    .field input,.field select,.field textarea{font-size:16px;min-height:51px}
+    .section{margin:36px 0}.section-kicker{font-size:12px;letter-spacing:.8px}
+    h2.section-title{font-size:clamp(27px,2.5vw,34px);letter-spacing:-.4px}
+    .section-desc{font-size:15px;line-height:1.75}.card-title{font-size:19px;line-height:1.45}
+    .card-sub{font-size:14px;line-height:1.65}.micro-label{font-size:12px}.badge{font-size:13px}
+    .card-head{padding:23px 24px 0}.card-body{padding:20px 24px 24px}
+    .ai-placeholder h3{font-size:19px}.ai-placeholder p{font-size:15px;line-height:1.8}
+    .report-block{padding:19px}.report-block h3{font-size:17px}.report-block p,.report-block ul{font-size:15px;line-height:1.85}
+    .ai-disclaimer{font-size:13px;line-height:1.8}.source-strip p{font-size:14px}.source-link{font-size:13px}
+    .lesson h3{font-size:16px}.lesson p{font-size:14px}.lesson .rule{font-size:13px}
+    .control-field label,.assumptions-title,.assumption-row{font-size:14px}.text-note{font-size:13px}.scenario .scenario-name{font-size:14px}.scenario .scenario-delta{font-size:13px}.chart-top b{font-size:15px}.chart-top span,.chart-legend{font-size:13px}
+    .check-row{font-size:15px}.check-row small{font-size:13px}.watch-item{font-size:14px}.empty-note{font-size:14px}.footer{font-size:13px}
+    .btn{font-size:15px}.hero{padding-top:38px;padding-bottom:32px}
+    .section-head{margin-bottom:18px}.card{box-shadow:0 10px 28px rgba(16,44,39,.055)}
+    .quick-read-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:18px}
+    .quick-read-card{padding:20px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(150deg,#fff,#f8fcfa)}
+    .quick-read-card h3{font-size:17px;margin:0 0 8px}.quick-read-card p{font-size:15px;line-height:1.8;color:#425c52;margin:0}
+    .full-report-details,.finance-guide{border:1px solid var(--line);border-radius:16px;padding:0 18px;background:#fbfdfc}
+    .full-report-details>summary,.finance-guide>summary{cursor:pointer;font-size:16px;font-weight:700;padding:17px 0;color:#176349;list-style-position:inside}
+    .full-report-details[open]{padding-bottom:18px}.full-report-details .report-grid{margin-top:5px}
+    .badge-caution{background:#fff4dd;color:#895a06;border:1px solid #f3dfb2}
+    .news-dashboard-grid{align-items:start}.daily-news-card .card-body{padding-top:15px}
+    .daily-news-feed{display:grid;gap:10px}.news-item{display:block;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:#fff;text-decoration:none;transition:transform .15s,border-color .15s}
+    .news-item:hover{transform:translateY(-1px);border-color:#8acdb3;background:#fbfffd}
+    .news-item-title{font-size:16px;line-height:1.6;font-weight:700;color:#173d31}.news-item-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--muted)}
+    .news-item-source{color:#08734f;font-weight:700}.news-loading,.news-empty{padding:24px;border-radius:14px;background:#f6faf8;color:var(--muted);font-size:15px;text-align:center;line-height:1.8}
+    .news-source-note{font-size:13px;line-height:1.7;color:var(--muted);margin-top:13px}.news-dashboard-grid .news-card .tv-widget{height:480px}
+    .flow-explainer{display:grid;grid-template-columns:1fr 1fr auto;gap:15px;align-items:start;background:#f5faf7;border:1px solid #e0eee7;border-radius:15px;padding:17px;margin-top:17px}
+    .flow-explainer b{display:block;font-size:15px;margin-bottom:4px}.flow-explainer span{display:block;color:var(--muted);font-size:14px;line-height:1.75}.flow-explainer a{align-self:center;color:var(--green);font-size:14px;font-weight:700;white-space:nowrap}
+    .finance-compare-card{margin-top:20px}.finance-help{font-size:14px;line-height:1.8;color:var(--muted);margin:0 0 17px}.finance-meta-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
+    .finance-meta-grid input,.finance-entry-grid input{width:100%;min-width:0;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);font:inherit;font-size:15px}
+    .finance-entry-grid{display:grid;grid-template-columns:minmax(190px,1.2fr) repeat(2,minmax(0,1fr));gap:9px 12px;align-items:center}
+    .finance-entry-grid label{font-size:15px;font-weight:600;color:#35584a}.finance-entry-head{font-size:14px;font-weight:700;color:var(--muted);padding:0 4px 5px}
+    .finance-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}.btn-primary-dark{background:#0b8f69;color:#fff}.btn-primary-dark:hover{background:#087756}.btn-light{background:#f0f7f3;border:1px solid var(--line);color:#225845}
+    .finance-chart-summary{margin-top:20px}.finance-empty{padding:22px;text-align:center;background:#f6faf8;border:1px dashed #cbded3;border-radius:14px;color:var(--muted);font-size:15px}
+    .finance-metrics-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.finance-metric{padding:17px;border:1px solid var(--line);border-radius:15px;background:#fff;min-width:0}
+    .finance-metric h4{font-size:16px;margin:0 0 5px}.finance-change{font-size:14px;font-weight:700;margin-bottom:13px}.finance-bar-row{display:grid;grid-template-columns:85px minmax(0,1fr);align-items:center;gap:8px;margin:8px 0;font-size:12px;color:var(--muted)}
+    .finance-bar-track{height:12px;background:#edf2ef;border-radius:999px;overflow:hidden}.finance-bar{height:100%;border-radius:999px;background:#93bca8;min-width:0}.finance-bar.latest{background:#0b9d70}.finance-bar.negative{background:#de6870}.finance-value-row{font-size:13px;color:#50665e;margin-top:4px;display:flex;justify-content:space-between;gap:8px}
+    .finance-verdict{padding:18px;border-radius:15px;background:#eaf8f0;border:1px solid #c9ead7;margin-top:13px}.finance-verdict h4{font-size:17px;margin:0 0 6px}.finance-verdict p{font-size:15px;line-height:1.85;margin:0;color:#315649}.finance-verdict ul{margin:8px 0 0;padding-left:22px;color:#315649;font-size:14px;line-height:1.8}
+    .finance-guide{margin-top:20px}.finance-guide .beginner-grid{margin:0 0 18px}
+    @media(max-width:1000px){.quick-read-grid{grid-template-columns:1fr}.flow-explainer{grid-template-columns:1fr}.finance-metrics-grid{grid-template-columns:1fr}}
+    @media(max-width:760px){body{font-size:15px}.hero-copy{font-size:15px}.section{margin:27px 0}h2.section-title{font-size:27px}.section-desc{font-size:14px}.card-title{font-size:18px}.card-sub{font-size:13px}.card-head{padding:18px 17px 0}.card-body{padding:16px}.report-block p,.report-block ul{font-size:14px}.ai-disclaimer{font-size:12px}.finance-meta-grid{grid-template-columns:1fr}.finance-entry-grid{grid-template-columns:minmax(110px,1fr) repeat(2,minmax(0,1fr));gap:8px}.finance-entry-grid label{font-size:13px}.finance-entry-grid input{font-size:13px;padding:9px 7px}.finance-entry-head{font-size:12px}.news-item-title{font-size:15px}.flow-explainer{padding:14px}}
   </style>
 </head>
 <body>
@@ -29,10 +77,10 @@
     <div class="shell topbar-inner">
       <a href="#top" class="brand" aria-label="StockLens Booji หน้าหลัก">
         <span class="brand-mark" aria-hidden="true"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><path d="M3 18L8 12.5L12 15L21 5" stroke="#e9ffb8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 5H21V10.5" stroke="#e9ffb8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span><span class="brand-title">StockLens<span>Booji</span> 🐱</span><span class="brand-sub">Your daily investing research desk</span></span>
+        <span><span class="brand-title">StockLens<span>Booji</span> 🐱</span><span class="brand-sub">อ่านตลาดให้ง่าย · ใช้ข้อมูลก่อนความรู้สึก</span></span>
       </a>
       <nav class="nav" id="mainNav" aria-label="เมนูหลัก">
-        <a href="#overview">ภาพรวม</a><a href="#chart">กราฟ & เทคนิค</a><a href="#fundamentals">งบการเงิน</a><a href="#forecast">จำลองอนาคต</a><a href="#calendar">ปฏิทินเศรษฐกิจ</a>
+        <a href="#daily-news">ข่าววันนี้</a><a href="#overview">ภาพรวมหุ้น</a><a href="#flows">ทิศทางสินทรัพย์</a><a href="#fundamentals">งบการเงิน</a><a href="#forecast">จำลองอนาคต</a><a href="#daily">Watchlist</a>
       </nav>
       <div class="top-right"><span><i class="live-dot"></i>เชื่อมต่อวิดเจ็ตตลาด</span><span class="today-label" id="todayLabel">Today</span><button class="mobile-menu" id="menuBtn" aria-label="เปิดเมนู">☰</button></div>
     </div>
@@ -45,7 +93,7 @@
         <div>
           <span class="eyebrow">✦ Research, not hype · StockLens Booji</span>
           <h1 id="heroTitle">เข้าใจธุรกิจ<br>ก่อนตัดสินใจลงทุน<span style="color:#8bf0c3">.</span></h1>
-          <p class="hero-copy">รวมกราฟ ข้อมูลงบ สัญญาณเทคนิค ข่าว และเครื่องมือจำลองความเป็นไปได้ไว้ที่เดียว ให้ Booji ช่วยแปลศัพท์การเงินเป็นภาษาคน — ไม่อ้างว่าตัวเลขใดเป็นข้อมูลสด ถ้าไม่ได้มาจากแหล่งข้อมูลที่แสดงอยู่จริง</p>
+          <p class="hero-copy">สรุปเรื่องสำคัญที่นักลงทุนควรรู้ในไม่กี่นาที: ข่าวล่าสุด ภาพตลาด งบการเงิน และฉากทัศน์อนาคต พร้อมแยกข้อมูลจริงออกจากสมมติฐานอย่างชัดเจน</p>
         </div>
         <aside class="hero-side-note"><span>DAILY RESEARCH ROUTINE</span><b>ข้อมูล → บริบท → ความเสี่ยง</b>ดูหลักฐานก่อน แล้วค่อยตั้งสมมติฐานของตัวเอง</aside>
       </div>
@@ -54,7 +102,7 @@
         <div class="field"><label for="market">🏢 ตลาดหุ้น</label><select id="market"><option value="US">🇺🇸 สหรัฐฯ (US)</option><option value="TH">🇹🇭 ไทย (SET)</option><option value="Other">🌏 ตลาดอื่น / ระบุเอง</option></select><div class="field-hint">วิดเจ็ตตลาดจะใช้สัญลักษณ์นี้ค้นหาข้อมูล</div></div>
         <div class="field"><label for="analysisHorizon">🧭 ระยะมองลงทุนของบทวิเคราะห์</label><select id="analysisHorizon"><option value="3-12 เดือน">3–12 เดือน</option><option value="1-3 ปี">1–3 ปี</option><option value="3-5 ปี">3–5 ปี</option><option value="5-10 ปี">5–10 ปี</option></select><div class="field-hint">แยกจากระยะจำลองผลตอบแทนด้านล่าง</div></div>
       </div>
-      <div class="field" style="margin-top:13px"><label for="evidenceInput">📋 ตัวเลขจาก TradingView ที่อยากให้ AI ช่วยแปล (ไม่บังคับ)</label><textarea id="evidenceInput" rows="2" placeholder="เช่น Revenue growth 18%, operating margin 32%, P/E 35x, total debt ... คัดลอกมาได้เพื่อให้ AI แปลผลจากตัวเลขที่คุณให้จริง"></textarea><div class="field-hint">ตัวเลขที่วางตรงนี้จะถูกส่งไปให้ AI ตีความ — ถ้าไม่ใส่ AI จะให้กรอบคิดเชิงคุณภาพ ไม่สร้างตัวเลขงบขึ้นมาเอง</div></div>
+      <div class="field" style="margin-top:13px"><label for="evidenceInput">📋 ตัวเลขจริงที่อยากให้ Booji ช่วยแปล (ไม่บังคับ)</label><textarea id="evidenceInput" rows="2" placeholder="เช่น Revenue growth 18%, operating margin 32%, P/E 35x, total debt ... คัดลอกมาได้เพื่อให้ AI แปลผลจากตัวเลขที่คุณให้จริง"></textarea><div class="field-hint">วางตัวเลขพร้อมงวดและหน่วยจากแหล่งที่เชื่อถือได้ เพื่อให้ AI อธิบายได้ตรงขึ้น หากไม่ใส่ ระบบจะไม่เดาตัวเลขให้</div></div>
       <div class="hero-actions"><button id="analyzeBtn" class="btn btn-primary"><span id="btnText">✦ สร้าง Research Brief</span><span aria-hidden="true">↗</span></button><button id="clearEvidenceBtn" class="btn btn-outline" type="button">ล้างตัวเลขที่วาง</button></div>
       <div class="history-row"><strong>ค้นหาล่าสุด</strong><div id="history" style="display:flex;gap:7px;flex-wrap:wrap"></div><span style="opacity:.72">·</span><strong>รายการติดตาม</strong><span id="watchlistHeroCount">0 หุ้น</span></div>
       <div id="errorText" class="error-panel hidden" role="alert"></div>
@@ -65,12 +113,25 @@
       <div class="source-links"><a class="source-link" id="tvSymbolLink" href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">↗ เปิดบน TradingView</a><a class="source-link" href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener noreferrer">↗ ปฏิทิน Forex Factory</a></div>
     </div>
 
+    <section class="section" id="daily-news">
+      <div class="section-head"><div><div class="section-kicker">TODAY / ข่าวที่ควรอ่าน</div><h2 class="section-title">ข่าวเด่นวันนี้ ไม่ต้องไล่เปิดหลายเว็บ</h2><p class="section-desc">ข่าวเกี่ยวกับหุ้นที่เลือกและข่าวตลาดโดยรวม อัปเดตจากฟีดข่าวพร้อมลิงก์ไปยังต้นทาง</p></div><button class="btn btn-light" id="refreshNewsBtn" type="button">↻ อัปเดตข่าว</button></div>
+      <div class="widget-grid-2 news-dashboard-grid">
+        <article class="card daily-news-card"><div class="card-head"><div><h3 class="card-title">📰 ข่าวล่าสุดของ <span id="newsTickerLabel">NVDA</span></h3><div class="card-sub">Google News RSS · ค้นหาข่าวในช่วง 1 วันล่าสุด</div></div><span class="badge">หุ้นที่เลือก</span></div><div class="card-body"><div id="dailyNewsFeed" class="daily-news-feed"><div class="news-loading">กำลังค้นหาข่าวล่าสุด…</div></div><div class="news-source-note">หัวข้อข่าวอาจเป็นภาษาอังกฤษตามต้นฉบับ โปรดเปิดอ่านแหล่งข่าวก่อนตีความผลกระทบ</div></div></article>
+        <article class="card daily-news-card"><div class="card-head"><div><h3 class="card-title">🌍 ข่าวใหญ่ของตลาด</h3><div class="card-sub">Top Stories จาก TradingView · ไม่จำกัดหุ้นตัวเดียว</div></div><a class="source-link" href="https://www.tradingview.com/news/" target="_blank" rel="noopener noreferrer">ดูต้นทาง ↗</a></div><div class="card-body"><div id="marketTopStoriesWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>ข่าวตลาดล่าสุด</strong>กำลังโหลดข่าวจาก TradingView…</div></div></div></div></article>
+      </div>
+    </section>
+
     <section class="section" id="overview">
       <div class="section-head"><div><div class="section-kicker">01 / The company</div><h2 class="section-title">ภาพรวมที่อิงแหล่งข้อมูล</h2><p class="section-desc">เช็กราคากับรายละเอียดหุ้นจาก TradingView โดยตรง วิดเจ็ตอาจแสดงข้อมูลล่าช้าตามตลาดและสิทธิ์ข้อมูลของผู้ให้บริการ</p></div><span class="badge">↗ TradingView widgets</span></div>
       <div class="summary-grid">
         <article class="card quote-card"><div class="card-head"><div><h3 class="card-title">ราคาและสรุปหุ้น <span id="quoteTitle">NVDA</span></h3><div class="card-sub">ข้อมูลจากวิดเจ็ตภายนอก · ไม่ดึงตัวเลขจากโมเดล AI</div></div><span class="micro-label">SYMBOL INFO</span></div><div class="card-body"><div id="symbolInfoWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>ราคาและข้อมูลตลาด</strong>กด “สร้าง Research Brief” เพื่อโหลดข้อมูลของหุ้นที่เลือก</div></div></div></div></article>
         <article class="card"><div class="card-head"><div><h3 class="card-title">Booji’s daily lens 🐾</h3><div class="card-sub">คำถามที่ควรตอบให้ได้ก่อนซื้อหุ้นทุกตัว</div></div></div><div class="ai-placeholder"><div class="ai-avatar">🐱</div><div><h3>อย่าดูแค่ราคาขึ้นหรือลง</h3><p>ธุรกิจโตจริงไหม? กำไรกลายเป็นเงินสดหรือเปล่า? ราคาปัจจุบันเผื่อความผิดหวังไว้มากแค่ไหน? ใช้หัวข้อเหล่านี้เป็น checklist แล้วอ่านตัวเลขจริงประกอบ</p><p style="margin-top:12px"><b style="color:#1b5944">เป้าหมาย:</b> เข้าใจทั้งกรณีที่เราคิดถูกและกรณีที่เราคิดผิด</p></div></div></article>
       </div>
+    </section>
+
+    <section class="section" id="flows">
+      <div class="section-head"><div><div class="section-kicker">MARKET ROTATION / ภาพเงินในตลาด</div><h2 class="section-title">ตอนนี้สินทรัพย์กลุ่มไหนแข็งหรืออ่อน?</h2><p class="section-desc">เปรียบเทียบราคา ETF/สินทรัพย์ตัวแทน เพื่อดูแรงส่งของตลาดในช่วงสั้น</p></div><span class="badge badge-caution">ตัวแทนจากราคา · ไม่ใช่ยอดเงินไหลจริง</span></div>
+      <article class="card flow-card"><div class="card-head"><div><h3 class="card-title">🧭 Asset rotation radar</h3><div class="card-sub">สลับแท็บเพื่อดูหุ้นสหรัฐฯ หุ้นเทคโนโลยี ทองคำ พันธบัตร ดอลลาร์ น้ำมัน และคริปโต</div></div></div><div class="card-body"><div id="assetFlowWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>ภาพรวมสินทรัพย์</strong>กำลังโหลดตัวชี้วัดราคาจาก TradingView…</div></div></div><div class="flow-explainer"><div><b>อ่านแบบเร็ว</b><span>หุ้นแข็งกว่าทอง/พันธบัตรอาจสอดคล้องกับภาวะรับความเสี่ยง แต่ไม่ใช่หลักฐานว่ามีเงินไหลเข้าสุทธิ</span></div><div><b>ข้อจำกัด</b><span>หากต้องการ “เงินไหลเข้า/ออกจริง” ต้องใช้ข้อมูล fund flows หรือ ETF creations/redemptions จากผู้ให้บริการข้อมูลเฉพาะ</span></div><a href="https://www.tradingview.com/markets/" target="_blank" rel="noopener noreferrer">เปิดข้อมูลตลาด ↗</a></div></div></article>
     </section>
 
     <section class="section" id="aiAnalysis">
@@ -93,7 +154,22 @@
         <article class="card profile-card"><div class="card-head"><div><h3 class="card-title">บริษัททำเงินจากอะไร?</h3><div class="card-sub">Company profile · ธุรกิจและอุตสาหกรรม</div></div></div><div class="card-body"><div id="companyProfileWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Company profile</strong>รายละเอียดบริษัทจาก TradingView</div></div></div></div></article>
         <article class="card financial-card"><div class="card-head"><div><h3 class="card-title">งบและตัวชี้วัดการเงิน</h3><div class="card-sub">Financials · ตัวเลขจริงจากวิดเจ็ต TradingView</div></div></div><div class="card-body"><div id="financialsWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Financials</strong>รายได้ กำไร และตัวชี้วัดของหุ้นที่เลือก</div></div></div></div></article>
       </div>
-      <div style="margin:20px 0 12px"><div class="section-kicker">Booji translates finance</div><h3 style="margin:4px 0;font-size:18px">อ่านงบอย่างไรไม่ให้หลงกับตัวเลขสวย ๆ</h3><p class="section-desc">ใช้เกณฑ์เปรียบเทียบกับบริษัทเดิมในอดีตและธุรกิจประเภทเดียวกัน เพราะแต่ละอุตสาหกรรมใช้ตัวชี้วัดไม่เหมือนกัน</p></div>
+      <article class="card finance-compare-card">
+        <div class="card-head"><div><h3 class="card-title">📊 กราฟงบการเงิน: งวดก่อน เทียบ งวดล่าสุด</h3><div class="card-sub">ใส่ตัวเลขที่อ่านจากวิดเจ็ตด้านบน แล้วระบบจะวาดกราฟและสรุปภาษาไทยให้ทันที</div></div><span class="badge">ตัวเลขจากคุณ</span></div>
+        <div class="card-body">
+          <p class="finance-help">วิดเจ็ต TradingView อยู่ใน iframe จึงไม่สามารถให้ JavaScript อ่านตัวเลขภายในโดยอัตโนมัติได้ เพื่อไม่สร้างตัวเลขมั่ว กราฟนี้จะใช้เฉพาะค่าที่คุณกรอก ควรใช้สกุลเงิน หน่วย และประเภทงวดให้ตรงกันทั้งหมด</p>
+          <div class="finance-meta-grid"><div class="control-field"><label for="financeUnit">หน่วยตัวเลข</label><input id="financeUnit" type="text" value="ล้าน USD" maxlength="24" placeholder="เช่น ล้านบาท / ล้าน USD"></div><div class="control-field"><label for="financePeriodPrev">งวดก่อน</label><input id="financePeriodPrev" type="text" value="งวดก่อน" maxlength="30"></div><div class="control-field"><label for="financePeriodNow">งวดล่าสุด</label><input id="financePeriodNow" type="text" value="งวดล่าสุด" maxlength="30"></div></div>
+          <div class="finance-entry-grid">
+            <div class="finance-entry-head">ตัวเลขงบ</div><div class="finance-entry-head" id="financePrevLabel">งวดก่อน</div><div class="finance-entry-head" id="financeNowLabel">งวดล่าสุด</div>
+            <label for="finRevenuePrev">รายได้รวม</label><input id="finRevenuePrev" type="number" step="any" placeholder="ตัวเลขงวดก่อน"><input id="finRevenueNow" type="number" step="any" placeholder="ตัวเลขงวดล่าสุด">
+            <label for="finProfitPrev">กำไรสุทธิ</label><input id="finProfitPrev" type="number" step="any" placeholder="ตัวเลขงวดก่อน"><input id="finProfitNow" type="number" step="any" placeholder="ตัวเลขงวดล่าสุด">
+            <label for="finCashPrev">เงินสดจากการดำเนินงาน</label><input id="finCashPrev" type="number" step="any" placeholder="ตัวเลขงวดก่อน"><input id="finCashNow" type="number" step="any" placeholder="ตัวเลขงวดล่าสุด">
+          </div>
+          <div class="finance-actions"><button id="buildFinanceChartBtn" type="button" class="btn btn-primary-dark">สร้างกราฟและสรุป</button><button id="clearFinanceChartBtn" type="button" class="btn btn-light">ล้างตัวเลข</button><span class="micro-label">ใช้ค่าจากงบจริง ไม่ใช่ AI ประมาณการ</span></div>
+          <div id="financeChartSummary" class="finance-chart-summary" aria-live="polite"><div class="finance-empty">กรอกตัวเลขอย่างน้อยหนึ่งรายการทั้งสองงวด แล้วกด “สร้างกราฟและสรุป”</div></div>
+        </div>
+      </article>
+      <details class="finance-guide"><summary>📚 คู่มืออ่านงบแบบภาษาคน (กดเปิดเมื่ออยากลงรายละเอียด)</summary>
       <div class="beginner-grid">
         <article class="lesson"><span class="lesson-icon">📈</span><h3>รายได้ (Revenue)</h3><p>ยอดขายกำลังโตหรือหด? ดูอย่างน้อยหลายไตรมาสและแยกว่าโตจากปริมาณ ราคา หรือการซื้อกิจการ</p><span class="rule">รายได้โต ≠ กำไรโตเสมอ</span></article>
         <article class="lesson"><span class="lesson-icon">🧾</span><h3>อัตรากำไร (Margins)</h3><p>Gross margin คือกำไรหลังต้นทุนขาย, operating margin หักค่าใช้จ่ายดำเนินงาน และ net margin คือส่วนที่เหลือหลังรายการต่าง ๆ</p><span class="rule">มองแนวโน้มและเหตุผลที่เปลี่ยน</span></article>
@@ -104,6 +180,7 @@
         <article class="lesson"><span class="lesson-icon">🛡️</span><h3>ROE / ROIC</h3><p>ดูว่าบริษัทสร้างผลตอบแทนจากทุนของผู้ถือหุ้นหรือเงินทุนที่ใช้ได้ดีแค่ไหน ตรวจด้วยว่าหนี้สูงเกินไปจนทำให้ ROE ดูดีหรือไม่</p><span class="rule">คุณภาพการลงทุนสำคัญกว่าค่าเดียว</span></article>
         <article class="lesson"><span class="lesson-icon">🎁</span><h3>เงินปันผล</h3><p>ดู dividend yield คู่กับ payout ratio และ Free Cash Flow ปันผลสูงมากอาจเกิดจากราคาหุ้นร่วง ไม่ใช่เพราะธุรกิจแข็งแรง</p><span class="rule">เช็กความยั่งยืนก่อนมองเป็นรายได้</span></article>
       </div>
+      </details>
     </section>
 
     <section class="section" id="forecast">
