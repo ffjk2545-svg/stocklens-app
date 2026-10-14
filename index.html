@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockLens Booji 🐱✨</title>
+    <title>StockLensBooji 🐱✨</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
@@ -18,6 +18,14 @@
 </head>
 <body class="min-h-screen flex flex-col items-center p-4 sm:p-8">
 
+    <!-- Top Bar for API Key -->
+    <div class="w-full max-w-4xl flex justify-end mb-4">
+        <button onclick="toggleKeyModal()" class="px-4 py-2 bg-white/80 hover:bg-white text-emerald-800 rounded-xl shadow text-sm font-medium flex items-center gap-2 border border-emerald-200 transition">
+            🔑 ตั้งค่า API Key
+        </button>
+    </div>
+
+    <!-- Header Section -->
     <div class="w-full max-w-4xl glass-card overflow-hidden mb-8">
         <div class="emerald-gradient p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between">
             <div class="flex items-center gap-4 mb-4 sm:mb-0">
@@ -40,7 +48,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                 <div>
                     <label class="block text-sm font-semibold mb-2">🏷️ ชื่อหุ้น (Ticker)</label>
-                    <input type="text" id="ticker" placeholder="เช่น NVDA, PTT" class="w-full p-3 rounded-xl border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50 uppercase">
+                    <input type="text" id="ticker" placeholder="เช่น KO, PTT, NVDA" class="w-full p-3 rounded-xl border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50 uppercase">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold mb-2">🏢 ตลาด (Market)</label>
@@ -54,33 +62,50 @@
                     <label class="block text-sm font-semibold mb-2">⏳ กรอบเวลา (Timeframe)</label>
                     <select id="timeframe" class="w-full p-3 rounded-xl border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50">
                         <option value="ปัจจุบัน">🎯 ข้อมูลปัจจุบันล่าสุด</option>
-                        <option value="5 ปี">📈 ย้อนหลัง 5 ปี (ภาพกลาง)</option>
-                        <option value="10 ปี">🚀 ย้อนหลัง 10 ปี (ภาพยาว)</option>
+                        <option value="5 ปี">📈 ย้อนหลัง 5 ปี</option>
+                        <option value="10 ปี">🚀 ย้อนหลัง 10 ปี</option>
                     </select>
                 </div>
             </div>
             <button id="analyzeBtn" class="w-full emerald-gradient hover:opacity-90 font-bold py-4 rounded-xl transition duration-300 text-lg shadow-lg flex items-center justify-center gap-2">
                 <span id="btnText">🪄 ส่องหุ้นเลย! 🐾</span>
             </button>
+            <div class="mt-4 flex gap-2 flex-wrap items-center">
+                <span class="text-sm font-medium">🐾 ประวัติการส่องหุ้น:</span>
+                <div id="history" class="flex gap-2 flex-wrap"></div>
+            </div>
         </div>
     </div>
 
     <!-- Loading State -->
     <div id="loadingState" class="hidden w-full max-w-4xl glass-card p-12 text-center">
         <div class="w-20 h-20 border-8 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto mb-6"></div>
-        <h2 class="text-2xl font-bold text-emerald-800">น้องแมวกำลังวิ่งหาข้อมูล... 🏃‍♂️💨</h2>
-        <p class="text-emerald-600 mt-2">อาจใช้เวลา 10-20 วินาที รอก่อนนะเมี้ยว!</p>
+        <h2 class="text-2xl font-bold text-emerald-800">น้องแมวกำลังวิเคราะห์งบการเงิน... 🏃‍♂️💨</h2>
+        <p class="text-emerald-600 mt-2">โปรดรอสักครู่ ร่างรายงานให้อยู่เน้อเมี้ยว!</p>
     </div>
 
     <!-- Error State -->
     <div id="errorState" class="hidden w-full max-w-4xl glass-card p-8 text-center bg-red-50 border-red-200">
         <div class="text-red-500 text-5xl mb-4">❗</div>
-        <h2 class="text-xl font-bold text-red-700" id="errorText">เกิดข้อผิดพลาดในการดึงข้อมูล</h2>
+        <h2 class="text-xl font-bold text-red-700" id="errorText">เกิดข้อผิดพลาด</h2>
         <button onclick="document.getElementById('errorState').classList.add('hidden')" class="mt-4 px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">ลองใหม่นะเมี้ยว 🔄</button>
     </div>
 
     <!-- Report Area -->
-    <div id="reportArea" class="hidden w-full max-w-4xl space-y-6"></div>
+    <div id="reportArea" class="hidden w-full max-w-4xl space-y-6 mb-12"></div>
+
+    <!-- API Key Modal -->
+    <div id="keyModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-emerald-100">
+            <h3 class="text-xl font-bold text-emerald-900 mb-2">🔑 ตั้งค่า Gemini API Key</h3>
+            <p class="text-sm text-gray-600 mb-4">กรอกรหัส API Key ของคุณเพื่อใช้งาน (ระบบจะจำไว้ในเครื่องของคุณ ปลอดภัย 100% ไม่รั่วไหล)</p>
+            <input type="password" id="apiKeyInput" placeholder="วางรหัส API Key ที่นี่..." class="w-full p-3 rounded-xl border border-gray-300 mb-4 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <div class="flex justify-end gap-2">
+                <button onclick="toggleKeyModal()" class="px-4 py-2 bg-gray-200 rounded-xl text-gray-700 font-medium hover:bg-gray-300">ยกเลิก</button>
+                <button onclick="saveApiKey()" class="px-4 py-2 emerald-gradient rounded-xl font-medium shadow">บันทึก 🐾</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         const getToday = () => {
@@ -88,10 +113,38 @@
             return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
         };
 
+        function toggleKeyModal() {
+            const modal = document.getElementById('keyModal');
+            modal.classList.toggle('hidden');
+            if(!modal.classList.contains('hidden')) {
+                document.getElementById('apiKeyInput').value = localStorage.getItem('user_gemini_key') || '';
+            }
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if(key) {
+                localStorage.setItem('user_gemini_key', key);
+                alert('บันทึกกุญแจสำเร็จ! พร้อมส่องหุ้นแล้วเมี้ยว 🐾');
+                toggleKeyModal();
+            } else {
+                alert('กรุณากรอกรหัส Key ก่อนบันทึกนะเมี้ยว');
+            }
+        }
+
+        let searchHistory = ["KO", "PTT", "NVDA"];
+        function renderHistory() {
+            const container = document.getElementById('history');
+            container.innerHTML = searchHistory.map(t => 
+                `<button onclick="document.getElementById('ticker').value='${t}'; document.getElementById('analyzeBtn').click();" class="px-3 py-1 bg-white border border-emerald-300 text-emerald-700 rounded-full text-sm hover:bg-emerald-50 transition">🔍 ${t}</button>`
+            ).join('');
+        }
+        renderHistory();
+
         const promptTemplate = (ticker, market, timeframe) => `
 คุณคือสุดยอดนักวิเคราะห์หุ้นระดับโลก AI Stock Research ชื่อ "StockLens Booji" (คาแรคเตอร์: ฉลาดเฉียบแหลม มั่นใจ อธิบายเก่ง และชอบใส่อิโมจิน่ารักๆ เยอะๆ 🐱✨🚀📉📈💰)
 กรุณาวิเคราะห์หุ้น ${ticker} ในตลาด ${market} โดยเน้นข้อมูล ${timeframe}
-ข้อบังคับ:
+ข้อบังคับอย่างเคร่งครัด:
 1. ใช้ภาษาไทย (Thai Language) ทั้งหมด
 2. ห้ามมโนตัวเลขเด็ดขาด หากไม่มีข้อมูลให้เขียนว่า "ไม่มีข้อมูล 😿"
 3. ตอบกลับมาเป็น JSON Format เท่านั้น โดยมีโครงสร้างดังนี้:
@@ -101,13 +154,20 @@
   "C_Financial": "สรุปงบการเงิน รายได้, กำไรสุทธิ แนวโน้มเป็นอย่างไร",
   "D_Valuation": "ความถูกแพงของหุ้นเมื่อเทียบกับคู่แข่งหรืออดีต",
   "E_BoojiInsight": "มุมมองของน้องแมว Booji: Sentiment (Bullish/Bearish), Risk Level (Low/Med/High), Moat (จุดแข็งที่คู่แข่งสู้ยาก)",
-  "F_Sources": "แหล่งข้อมูลอ้างอิง (ระบุว่าวิเคราะห์จากฐานข้อมูลความรู้ AI)"
+  "F_Sources": "แหล่งข้อมูลอ้างอิง (ระบุว่าวิเคราะห์จากฐานข้อมูลตลาดปัจจุบัน)"
 }`;
 
         document.getElementById('analyzeBtn').addEventListener('click', async () => {
             const ticker = document.getElementById('ticker').value.trim().toUpperCase();
             const market = document.getElementById('market').value;
             const timeframe = document.getElementById('timeframe').value;
+            const apiKey = localStorage.getItem('user_gemini_key');
+
+            if (!apiKey) {
+                alert('กรุณากดปุ่ม "🔑 ตั้งค่า API Key" ที่มุมขวาบนเพื่อใส่กุญแจก่อนใช้งานนะเมี้ยว! 🙀');
+                toggleKeyModal();
+                return;
+            }
             
             if (!ticker) { alert('ใส่ชื่อหุ้นให้น้องแมวก่อนนะเมี้ยว! 🙀'); return; }
 
@@ -125,25 +185,32 @@
             loading.classList.remove('hidden');
 
             try {
-                const response = await fetch('/api/analyze', {
+                // ยิงตรงเข้า Google Gemini API ด้วยโมเดลมาตรฐานที่เสถียรที่สุด
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         contents: [{ parts: [{ text: promptTemplate(ticker, market, timeframe) }] }]
-                        // 💡 นำคำสั่ง Search ออกชั่วคราว เพื่อป้องกัน Google บล็อกคำขอ
                     })
                 });
 
                 const data = await response.json();
                 
-                // ดักจับ Error ที่ส่งมาจาก Vercel
                 if (!response.ok) {
-                    throw new Error(data.error || `เซิร์ฟเวอร์ตอบกลับรหัส: ${response.status}`);
+                    throw new Error(data.error?.message || `API Error: ${response.status}`);
                 }
                 
                 let textResult = data.candidates[0].content.parts[0].text;
                 let cleanJson = textResult.replace(/```json/g, '').replace(/```/g, '').trim();
                 let parsedData = JSON.parse(cleanJson);
+
+                if (!searchHistory.includes(ticker)) {
+                    searchHistory.unshift(ticker);
+                    if(searchHistory.length > 5) searchHistory.pop();
+                    renderHistory();
+                }
 
                 renderReport(parsedData, ticker);
                 
@@ -154,8 +221,7 @@
                 console.error(error);
                 loading.classList.add('hidden');
                 errorDiv.classList.remove('hidden');
-                // โชว์ข้อความ Error สีแดงตัวใหญ่บนหน้าเว็บให้เห็นชัดๆ
-                document.getElementById('errorText').innerText = error.message;
+                document.getElementById('errorText').innerText = `เกิดข้อผิดพลาด: ${error.message}`;
             } finally {
                 btn.disabled = false;
                 btn.classList.remove('opacity-75');
@@ -167,7 +233,7 @@
             const report = document.getElementById('reportArea');
             report.innerHTML = `
                 <div class="glass-card p-6 border-t-4 border-emerald-500">
-                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">🏢 A. โปรไฟล์บริษัท (Company Profile)</h2>
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">🏢 A. โปรไฟล์บริษัท (${ticker})</h2>
                     <p class="text-gray-700 leading-relaxed">${data.A_CompanyProfile}</p>
                 </div>
                 
