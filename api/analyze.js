@@ -14,8 +14,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "รูปแบบคำขอไม่ถูกต้อง: ต้องมี contents เป็น array" });
   }
 
-  // Keep the model configurable so it can be changed without editing frontend code.
-  const model = process.env.GEMINI_MODEL || "gemini-3.8-flash";
+  // Pin to the current supported model so a stale Vercel GEMINI_MODEL value
+  // (for example gemini-1.5-flash) cannot silently override the fixed version.
+  const model = "gemini-3.8-flash";
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
 
   try {
