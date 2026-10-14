@@ -7,12 +7,12 @@ export default async function handler(req, res) {
     
     if (!API_KEY) {
         return res.status(400).json({ 
-            error: "Vercel แจ้งว่า: ไม่พบ API Key (กรุณาเช็ค Environment Variables และกด Redeploy อีกครั้ง)" 
+            error: "Vercel แจ้งว่า: ไม่พบ API Key ใน Environment Variables" 
         });
     }
 
-    // 💡 ใช้ URL และชื่อโมเดลมาตรฐานที่รองรับกับระบบ Serverless ของ Vercel อย่างถูกต้อง
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+    // 💡 ใช้ Endpoint และชื่อรุ่นมาตรฐานที่รองรับ Serverless 100%
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 
     try {
         const response = await fetch(url, {
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
         res.status(200).json(data);
 
-    } catch (error) {
+    }catch (error) {
         console.error("Backend Error:", error);
         res.status(500).json({ error: `เซิร์ฟเวอร์ล่ม: ${error.message}` });
     }
