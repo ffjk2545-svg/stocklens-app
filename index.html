@@ -1,91 +1,166 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockLensBooji 🐱✨</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Prompt', sans-serif; background-color: #ecfdf5; color: #064e3b; }
-        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 1.5rem; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); }
-        .emerald-gradient { background: linear-gradient(135deg, #059669 0%, #10b981 100%); color: white; }
-        .floating { animation: float 3s ease-in-out infinite; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
-        .spinner { border: 4px solid rgba(16, 185, 129, 0.3); border-left-color: #059669; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0e3c31">
+  <meta name="description" content="StockLens Booji — แดชบอร์ดวิเคราะห์หุ้นที่ผสานกราฟ ข้อมูลงบ การอ่านความเสี่ยง และเครื่องมือจำลองสถานการณ์ลงทุน">
+  <title>StockLens Booji — ลงทุนด้วยข้อมูล ไม่ใช่เดา</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#102c27;--muted:#61746e;--line:#dce8e3;--canvas:#f3f7f5;--paper:#fff;--green:#0b8f69;--green-2:#13b981;--green-pale:#e6f7ef;--navy:#103b32;--blue:#4169e1;--purple:#8458db;--orange:#e58a32;--red:#cf4549;--radius:22px;--shadow:0 12px 36px rgba(16,44,39,.07)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:92px}body{margin:0;background:var(--canvas);color:var(--ink);font-family:"IBM Plex Sans Thai",sans-serif;line-height:1.55}button,input,select,textarea{font:inherit}button,a,select{ -webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit} .shell{width:min(1380px,calc(100% - 36px));margin:0 auto}
+    .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(220,232,227,.85)}.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:22px;min-height:72px}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;min-width:max-content}.brand-mark{height:42px;width:42px;display:grid;place-items:center;border-radius:14px;color:white;background:linear-gradient(140deg,#087b5d,#20c98d);box-shadow:0 7px 15px #0c8f6930}.brand-title{font-family:Manrope,sans-serif;font-size:19px;line-height:1.1;font-weight:800;letter-spacing:-.7px}.brand-title span{color:var(--green)}.brand-sub{color:var(--muted);font-size:11px;margin-top:3px}.nav{display:flex;align-items:center;gap:5px}.nav a{padding:9px 12px;border-radius:11px;text-decoration:none;font-size:13px;color:#4d625c;white-space:nowrap}.nav a:hover{background:var(--green-pale);color:var(--green)}.top-right{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;white-space:nowrap}.live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#16a875;margin-right:5px;box-shadow:0 0 0 4px #16a8751b}.mobile-menu{display:none;border:1px solid var(--line);background:white;border-radius:10px;padding:8px 11px}
+    .ticker-band{background:#fff;border-bottom:1px solid var(--line);min-height:46px}.ticker-band .tv-ticker{height:45px;overflow:hidden}.hero{position:relative;isolation:isolate;overflow:hidden;margin:26px auto 22px;border-radius:28px;background:radial-gradient(ellipse at 90% -15%,#2bc990 0%,transparent 35%),linear-gradient(120deg,#0d3c31 0%,#105648 55%,#0b8f69 100%);color:white;padding:34px clamp(20px,4vw,48px) 28px;box-shadow:0 18px 45px #0d4f3b1a}.hero:before{content:"";position:absolute;z-index:-1;right:4%;bottom:-190px;width:420px;height:420px;border:1px solid #ffffff13;border-radius:50%;box-shadow:0 0 0 42px #ffffff06,0 0 0 90px #ffffff04}.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:#ffffff14;border:1px solid #ffffff21;font-family:Manrope,sans-serif;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:#d3f9e9}.hero-head{display:flex;justify-content:space-between;gap:28px;align-items:flex-start}.hero h1{font-size:clamp(28px,3.3vw,43px);letter-spacing:-1.3px;line-height:1.2;margin:14px 0 10px;font-weight:700}.hero-copy{max-width:640px;color:#d2e8df;font-size:14px}.hero-side-note{max-width:230px;padding:15px 17px;border:1px solid #ffffff24;background:#ffffff0b;border-radius:18px;font-size:12px;color:#e1f9ef}.hero-side-note b{display:block;font-size:17px;color:#fff;margin:3px 0}.search-grid{display:grid;grid-template-columns:1.1fr .9fr .9fr;gap:12px;margin-top:26px}.field label{display:flex;align-items:center;gap:7px;font-size:12px;color:#e2f6ed;font-weight:600;margin-bottom:7px}.field input,.field select,.field textarea{width:100%;border:1px solid #ffffff55;background:#fbfffd;color:#153e34;border-radius:13px;padding:13px 14px;outline:none;min-height:48px}.field input:focus,.field select:focus,.field textarea:focus{border-color:#72e5b7;box-shadow:0 0 0 3px #6ee7b733}.field-hint{color:#c4e6d8;font-size:10px;margin-top:5px}.hero-actions{display:flex;gap:12px;margin-top:17px}.btn{border:0;border-radius:13px;padding:13px 18px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;transition:transform .15s,box-shadow .15s,opacity .15s}.btn:hover{transform:translateY(-1px)}.btn-primary{color:#093c30;background:#d5fae8;box-shadow:0 8px 18px #061f1829}.btn-primary:hover{background:#fff}.btn-outline{color:#f1fff7;border:1px solid #ffffff44;background:#ffffff0b}.btn:disabled{opacity:.65;cursor:wait;transform:none}.history-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:18px;color:#d6eee4;font-size:12px}.chip{border:1px solid #ffffff48;border-radius:999px;padding:5px 10px;background:#ffffff0b;color:#f4fff8;font-size:12px}.chip:hover,.chip.active{background:#e3fff0;color:#0b5a42;border-color:#e3fff0}.ticker-field-row{display:flex;gap:8px}.ticker-field-row input{flex:1;min-width:0}.icon-btn{min-width:46px;border:1px solid #ffffff55;border-radius:13px;background:#ffffff14;color:white;font-size:20px}
+    .source-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 16px;margin:0 0 25px;background:#fff;border:1px solid var(--line);border-radius:15px}.source-strip p{margin:0;font-size:12px;color:var(--muted)}.source-links{display:flex;gap:8px;flex-wrap:wrap}.source-link{display:inline-flex;gap:7px;align-items:center;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:7px 11px;background:#fff;font-size:11px;font-weight:600;color:#385c51}.source-link:hover{border-color:#8acdb3;background:#f2fcf6}
+    .section{margin:30px 0}.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:15px}.section-kicker{font-family:Manrope,sans-serif;text-transform:uppercase;font-weight:800;font-size:10px;letter-spacing:1.2px;color:var(--green)}h2.section-title{font-size:clamp(21px,2vw,27px);letter-spacing:-.6px;line-height:1.3;margin:4px 0 0;font-weight:700}.section-desc{font-size:12px;color:var(--muted);margin:6px 0 0;max-width:760px}.micro-label{font-size:10px;color:var(--muted);letter-spacing:.2px}.badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-pale);color:#08734f;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700}.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}.card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:20px 22px 0}.card-title{font-size:15px;font-weight:700;margin:0}.card-sub{font-size:11px;color:var(--muted);margin-top:4px}.card-body{padding:16px 22px 22px}.tv-widget{min-height:180px;width:100%;overflow:hidden}.tv-widget .tradingview-widget-container{width:100%;height:100%;min-height:inherit}.tv-widget .tradingview-widget-container__widget{width:100%;height:100%;min-height:inherit}.tv-widget iframe{max-width:100%}.tv-copyright{font-size:10px!important;color:var(--muted)!important;text-align:right;padding:5px 12px 10px}.tv-copyright a{color:#466b5e!important}.widget-placeholder{min-height:180px;display:grid;place-items:center;text-align:center;border-radius:14px;background:linear-gradient(145deg,#f8fbf9,#eef6f2);color:#81958d;font-size:12px;padding:24px}.widget-placeholder strong{display:block;font-size:14px;color:#47675a;margin-bottom:5px}
+    .summary-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.8fr);gap:18px}.quote-card{padding-bottom:0}.ai-placeholder{display:flex;gap:15px;align-items:flex-start;padding:20px 22px}.ai-avatar{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:14px;background:#e1f7ec;font-size:21px}.ai-placeholder h3{margin:0 0 5px;font-size:15px}.ai-placeholder p{margin:0;color:var(--muted);font-size:12px}.ai-output{padding:20px 22px 24px}.ai-banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}.ai-banner .tag{background:#f0f4ff;color:#3e5aa1}.report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.report-block{border:1px solid var(--line);background:#fbfdfc;border-radius:15px;padding:16px}.report-block.wide{grid-column:1/-1}.report-block h3{font-size:13px;margin:0 0 9px;display:flex;align-items:center;gap:7px}.report-block p{font-size:12px;color:#50665e;margin:0;white-space:pre-line;line-height:1.8}.report-block ul{padding-left:18px;margin:3px 0 0;color:#50665e;font-size:12px;line-height:1.8}.report-block li+li{margin-top:5px}.ai-disclaimer{margin-top:13px;font-size:10px;color:#6d7f78;background:#f4f7f5;border-radius:11px;padding:10px 12px;line-height:1.65}
+    .widget-grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.chart-card .tv-widget{height:570px}.profile-card .tv-widget{min-height:280px;height:310px}.financial-card .tv-widget{height:520px}.technical-card .tv-widget{height:470px}.news-card .tv-widget{height:480px}.calendar-card .tv-widget{height:500px}.beginner-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.lesson{padding:17px;border:1px solid var(--line);border-radius:16px;background:#fff}.lesson .lesson-icon{font-size:20px}.lesson h3{font-size:13px;margin:8px 0 7px}.lesson p{font-size:11px;color:var(--muted);line-height:1.75;margin:0}.lesson .rule{display:block;color:#215744;font-weight:700;margin-top:9px;font-size:10px}
+    .forecast-layout{display:grid;grid-template-columns:minmax(300px,.78fr) minmax(0,1.22fr);gap:18px;align-items:start}.forecast-controls{padding:21px}.control-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.control-field label{display:block;font-size:11px;color:#4f675e;font-weight:600;margin-bottom:6px}.control-field input,.control-field select{width:100%;border:1px solid var(--line);background:#fbfdfc;border-radius:11px;padding:10px 11px;color:var(--ink);outline:none}.control-field input:focus,.control-field select:focus{border-color:#66bd99;box-shadow:0 0 0 3px #1fa87519}.assumptions{padding:13px;margin-top:15px;border-radius:14px;background:#f5f9f7;border:1px solid #e2ece7}.assumptions-title{font-size:11px;font-weight:700;margin-bottom:9px}.assumption-row{display:grid;grid-template-columns:1fr 92px;align-items:center;gap:12px;margin:8px 0;font-size:11px;color:#4b6259}.assumption-row input{width:100%;border:1px solid var(--line);background:white;border-radius:9px;padding:7px 8px;text-align:right}.assumption-row .scenario-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px}.text-note{font-size:10px;color:var(--muted);line-height:1.7;margin:12px 0 0}.forecast-results{padding:20px}.scenario-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.scenario{border-radius:15px;padding:14px;border:1px solid var(--line);background:#fff;min-width:0}.scenario .scenario-name{font-size:11px;color:var(--muted);font-weight:700}.scenario .scenario-rate{font-family:Manrope,sans-serif;font-size:13px;font-weight:800;margin:5px 0}.scenario .scenario-value{font-family:Manrope,sans-serif;font-size:clamp(17px,2vw,25px);font-weight:800;letter-spacing:-.8px;line-height:1.25;overflow-wrap:anywhere}.scenario .scenario-delta{font-size:10px;color:var(--muted);margin-top:6px}.scenario.bear{border-top:3px solid #e36d74}.scenario.base{border-top:3px solid #16a875}.scenario.bull{border-top:3px solid #4d89e7}.chart-wrap{margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:16px;background:#fcfefd}.chart-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}.chart-top b{font-size:12px}.chart-top span{font-size:10px;color:var(--muted)}#forecastChart{display:block;width:100%;height:auto;overflow:visible}.chart-legend{display:flex;gap:13px;flex-wrap:wrap;font-size:10px;color:var(--muted);margin-top:5px}.chart-legend i{display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:5px}.calendar-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);gap:18px}.macro-note{padding:21px;background:linear-gradient(145deg,#143e34,#1a6550);color:white}.macro-note h3{margin:0 0 8px;font-size:17px}.macro-note p{color:#cce6dc;font-size:12px;line-height:1.8}.macro-link{display:flex;align-items:center;justify-content:space-between;gap:13px;background:#ffffff12;border:1px solid #ffffff26;border-radius:14px;padding:13px 14px;margin-top:10px;text-decoration:none}.macro-link b{font-size:12px}.macro-link span{font-size:10px;color:#d2e8de}.macro-link strong{font-size:16px}.daily-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}.checklist{padding:18px 21px}.check-row{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #edf2ef;font-size:12px;color:#425b51}.check-row:last-child{border:0}.check-row input{accent-color:var(--green);width:16px;height:16px;margin-top:3px;flex:0 0 16px}.check-row small{display:block;color:var(--muted);font-size:10px;margin-top:3px;line-height:1.5}.watchlist-panel{padding:18px 21px}.watchlist-items{display:flex;gap:8px;flex-wrap:wrap;margin-top:11px}.watch-item{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 11px;background:#fbfdfc;font-size:12px}.watch-item .watch-open{border:0;background:none;padding:0;color:var(--green);font-weight:700}.watch-item .watch-remove{border:0;background:#edf4f0;color:#667b72;border-radius:50%;width:20px;height:20px;line-height:1}.empty-note{font-size:11px;color:var(--muted);margin:10px 0 0}.footer{margin:35px 0 24px;border-top:1px solid var(--line);padding:23px 0;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;color:var(--muted);font-size:10px}.footer b{color:#45675a}.spinner{display:inline-block;width:17px;height:17px;border:2px solid #0c533e33;border-top-color:#0c533e;border-radius:50%;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.toast{position:fixed;z-index:90;bottom:20px;right:20px;max-width:360px;background:#123d32;color:white;border-radius:13px;padding:12px 16px;box-shadow:var(--shadow);font-size:12px;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateY(0)}.error-panel{margin:15px 0;border:1px solid #f3c3c3;background:#fff4f4;color:#9a2222;border-radius:14px;padding:14px;font-size:12px;white-space:pre-wrap}.hidden{display:none!important}
+    @media(max-width:1000px){.nav{gap:0}.nav a{padding:8px;font-size:11px}.top-right .today-label{display:none}.hero-side-note{display:none}.summary-grid{grid-template-columns:1fr}.beginner-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.shell{width:min(1380px,calc(100% - 22px))}.topbar-inner{min-height:64px}.nav{display:none;position:absolute;top:63px;left:0;right:0;padding:12px;background:#fff;border-bottom:1px solid var(--line);box-shadow:var(--shadow)}.nav.open{display:flex;flex-direction:column;align-items:stretch}.nav a{font-size:13px;padding:11px 14px}.mobile-menu{display:block}.top-right{margin-left:auto}.hero{padding:24px 18px;border-radius:22px;margin-top:14px}.hero h1{font-size:28px}.hero-copy{font-size:12px}.search-grid{grid-template-columns:1fr;gap:11px;margin-top:20px}.field input,.field select{min-height:45px;padding:11px 12px}.hero-actions{flex-direction:column}.hero-actions .btn{width:100%}.section{margin:25px 0}.section-head{align-items:flex-start;flex-direction:column;gap:6px}.widget-grid-2,.forecast-layout,.calendar-layout,.daily-grid{grid-template-columns:1fr}.chart-card .tv-widget{height:430px}.financial-card .tv-widget,.technical-card .tv-widget{height:420px}.news-card .tv-widget{height:420px}.calendar-card .tv-widget{height:440px}.scenario-cards{grid-template-columns:1fr}.scenario{display:grid;grid-template-columns:1fr auto;gap:0 10px}.scenario .scenario-value{grid-column:2;grid-row:1/3;align-self:center}.scenario .scenario-delta{margin-top:2px}.report-grid{grid-template-columns:1fr}.report-block.wide{grid-column:auto}.card-head{padding:17px 17px 0}.card-body,.forecast-controls,.forecast-results,.ai-output{padding:16px}.ai-placeholder{padding:16px}.control-grid{gap:10px}.source-strip{align-items:flex-start}.ticker-band .tv-ticker{height:42px}}
+    @media(max-width:420px){.brand-title{font-size:16px}.brand-sub{font-size:9px}.brand-mark{height:36px;width:36px}.top-right{font-size:10px}.beginner-grid{grid-template-columns:1fr}.section-title{font-size:21px!important}.card{border-radius:17px}.search-grid{margin-top:17px}}
+  </style>
 </head>
-<body class="min-h-screen flex flex-col items-center p-4 sm:p-8">
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a href="#top" class="brand" aria-label="StockLens Booji หน้าหลัก">
+        <span class="brand-mark" aria-hidden="true"><svg width="27" height="27" viewBox="0 0 24 24" fill="none"><path d="M3 18L8 12.5L12 15L21 5" stroke="#e9ffb8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.5 5H21V10.5" stroke="#e9ffb8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span><span class="brand-title">StockLens<span>Booji</span> 🐱</span><span class="brand-sub">Your daily investing research desk</span></span>
+      </a>
+      <nav class="nav" id="mainNav" aria-label="เมนูหลัก">
+        <a href="#overview">ภาพรวม</a><a href="#chart">กราฟ & เทคนิค</a><a href="#fundamentals">งบการเงิน</a><a href="#forecast">จำลองอนาคต</a><a href="#calendar">ปฏิทินเศรษฐกิจ</a>
+      </nav>
+      <div class="top-right"><span><i class="live-dot"></i>เชื่อมต่อวิดเจ็ตตลาด</span><span class="today-label" id="todayLabel">Today</span><button class="mobile-menu" id="menuBtn" aria-label="เปิดเมนู">☰</button></div>
+    </div>
+  </header>
+  <div class="ticker-band"><div class="shell tv-ticker" id="tickerTape"><div class="widget-placeholder" style="min-height:44px;padding:5px">กำลังโหลด Market Tape จาก TradingView…</div></div></div>
 
-    <div class="w-full max-w-4xl glass-card overflow-hidden mb-8">
-        <div class="emerald-gradient p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between">
-            <div class="flex items-center gap-4 mb-4 sm:mb-0">
-                <svg class="w-16 h-16 floating" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 70 L30 30 L45 45 L55 45 L70 30 L80 70 Z" fill="#a7f3d0"/>
-                    <path d="M35 50 Q40 55 45 50" stroke="#064e3b" stroke-width="3" fill="none"/>
-                    <path d="M55 50 Q60 55 65 50" stroke="#064e3b" stroke-width="3" fill="none"/>
-                    <circle cx="50" cy="60" r="3" fill="#064e3b"/>
-                    <path d="M10 80 L30 60 L50 70 L90 20" stroke="#fbbf24" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M75 20 L90 20 L90 35" stroke="#fbbf24" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <div>
-                    <h1 class="text-3xl font-bold tracking-tight">StockLens<span class="text-emerald-200">Booji</span> 🐱✨ <span class="text-sm font-normal bg-emerald-800 bg-opacity-50 px-2 py-1 rounded-full">AI</span></h1>
-                    <p class="text-emerald-100 mt-1">วิเคราะห์หุ้นทะลุมิติแบบเหมียวๆ 🐾</p>
-                </div>
-            </div>
+  <main class="shell" id="top">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-head">
+        <div>
+          <span class="eyebrow">✦ Research, not hype · StockLens Booji</span>
+          <h1 id="heroTitle">เข้าใจธุรกิจ<br>ก่อนตัดสินใจลงทุน<span style="color:#8bf0c3">.</span></h1>
+          <p class="hero-copy">รวมกราฟ ข้อมูลงบ สัญญาณเทคนิค ข่าว และเครื่องมือจำลองความเป็นไปได้ไว้ที่เดียว ให้ Booji ช่วยแปลศัพท์การเงินเป็นภาษาคน — ไม่อ้างว่าตัวเลขใดเป็นข้อมูลสด ถ้าไม่ได้มาจากแหล่งข้อมูลที่แสดงอยู่จริง</p>
         </div>
+        <aside class="hero-side-note"><span>DAILY RESEARCH ROUTINE</span><b>ข้อมูล → บริบท → ความเสี่ยง</b>ดูหลักฐานก่อน แล้วค่อยตั้งสมมติฐานของตัวเอง</aside>
+      </div>
+      <div class="search-grid">
+        <div class="field"><label for="ticker">🏷️ หุ้นที่ต้องการศึกษา</label><div class="ticker-field-row"><input id="ticker" value="NVDA" placeholder="NVDA หรือ NYSE:KO" autocomplete="off" maxlength="30"><button id="addWatchBtn" class="icon-btn" title="เพิ่มเข้ารายการติดตาม" aria-label="เพิ่มหุ้นเข้ารายการติดตาม">＋</button></div><div class="field-hint">ใส่ ticker หรือระบุตลาด เช่น NASDAQ:NVDA / NYSE:KO</div></div>
+        <div class="field"><label for="market">🏢 ตลาดหุ้น</label><select id="market"><option value="US">🇺🇸 สหรัฐฯ (US)</option><option value="TH">🇹🇭 ไทย (SET)</option><option value="Other">🌏 ตลาดอื่น / ระบุเอง</option></select><div class="field-hint">วิดเจ็ตตลาดจะใช้สัญลักษณ์นี้ค้นหาข้อมูล</div></div>
+        <div class="field"><label for="analysisHorizon">🧭 ระยะมองลงทุนของบทวิเคราะห์</label><select id="analysisHorizon"><option value="3-12 เดือน">3–12 เดือน</option><option value="1-3 ปี">1–3 ปี</option><option value="3-5 ปี">3–5 ปี</option><option value="5-10 ปี">5–10 ปี</option></select><div class="field-hint">แยกจากระยะจำลองผลตอบแทนด้านล่าง</div></div>
+      </div>
+      <div class="field" style="margin-top:13px"><label for="evidenceInput">📋 ตัวเลขจาก TradingView ที่อยากให้ AI ช่วยแปล (ไม่บังคับ)</label><textarea id="evidenceInput" rows="2" placeholder="เช่น Revenue growth 18%, operating margin 32%, P/E 35x, total debt ... คัดลอกมาได้เพื่อให้ AI แปลผลจากตัวเลขที่คุณให้จริง"></textarea><div class="field-hint">ตัวเลขที่วางตรงนี้จะถูกส่งไปให้ AI ตีความ — ถ้าไม่ใส่ AI จะให้กรอบคิดเชิงคุณภาพ ไม่สร้างตัวเลขงบขึ้นมาเอง</div></div>
+      <div class="hero-actions"><button id="analyzeBtn" class="btn btn-primary"><span id="btnText">✦ สร้าง Research Brief</span><span aria-hidden="true">↗</span></button><button id="clearEvidenceBtn" class="btn btn-outline" type="button">ล้างตัวเลขที่วาง</button></div>
+      <div class="history-row"><strong>ค้นหาล่าสุด</strong><div id="history" style="display:flex;gap:7px;flex-wrap:wrap"></div><span style="opacity:.72">·</span><strong>รายการติดตาม</strong><span id="watchlistHeroCount">0 หุ้น</span></div>
+      <div id="errorText" class="error-panel hidden" role="alert"></div>
+    </section>
 
-        <div class="p-6 sm:p-8">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                <div>
-                    <label class="block text-sm font-semibold mb-2">🏷️ ชื่อหุ้น (Ticker)</label>
-                    <input type="text" id="ticker" placeholder="เช่น KO, PTT, NVDA" class="w-full p-3 rounded-xl border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50 uppercase">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-2">🏢 ตลาด (Market)</label>
-                    <select id="market" class="w-full p-3 rounded-xl border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50">
-                        <option value="US">🇺🇸 ตลาดหุ้นสหรัฐฯ (US)</option>
-                        <option value="TH">🇹🇭 ตลาดหุ้นไทย (SET)</option>
-                        <option value="Other">🌍 อื่นๆ (Other)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-2">⏳ กรอบเวลา (Timeframe)</label>
-                    <select id="timeframe" class="w-full p-3 rounded-xl border border-emerald-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white/50">
-                        <option value="ปัจจุบัน">🎯 ข้อมูลปัจจุบันล่าสุด</option>
-                        <option value="5 ปี">📈 ย้อนหลัง 5 ปี</option>
-                        <option value="10 ปี">🚀 ย้อนหลัง 10 ปี</option>
-                    </select>
-                </div>
-            </div>
-            <button id="analyzeBtn" class="w-full emerald-gradient hover:opacity-90 font-bold py-4 rounded-xl transition duration-300 text-lg shadow-lg flex items-center justify-center gap-2">
-                <span id="btnText">🪄 ส่องหุ้นเลย! 🐾</span>
-            </button>
-            <div class="mt-4 flex gap-2 flex-wrap items-center">
-                <span class="text-sm font-medium">🐾 ประวัติการส่องหุ้น:</span>
-                <div id="history" class="flex gap-2 flex-wrap"></div>
-            </div>
-        </div>
+    <div class="source-strip">
+      <p><b>ข้อมูลตลาดแยกจากความเห็น AI:</b> ตัวเลขจริงแสดงจาก TradingView ส่วน AI ช่วยอธิบายเหตุผลและความเสี่ยง</p>
+      <div class="source-links"><a class="source-link" id="tvSymbolLink" href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">↗ เปิดบน TradingView</a><a class="source-link" href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener noreferrer">↗ ปฏิทิน Forex Factory</a></div>
     </div>
 
-    <!-- Loading State -->
-    <div id="loadingState" class="hidden w-full max-w-4xl glass-card p-12 text-center">
-        <div class="w-20 h-20 border-8 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mx-auto mb-6"></div>
-        <h2 class="text-2xl font-bold text-emerald-800">น้องแมวกำลังวิเคราะห์งบการเงิน... 🏃‍♂️💨</h2>
-        <p class="text-emerald-600 mt-2">โปรดรอสักครู่ ร่างรายงานให้อยู่เน้อเมี้ยว!</p>
-    </div>
+    <section class="section" id="overview">
+      <div class="section-head"><div><div class="section-kicker">01 / The company</div><h2 class="section-title">ภาพรวมที่อิงแหล่งข้อมูล</h2><p class="section-desc">เช็กราคากับรายละเอียดหุ้นจาก TradingView โดยตรง วิดเจ็ตอาจแสดงข้อมูลล่าช้าตามตลาดและสิทธิ์ข้อมูลของผู้ให้บริการ</p></div><span class="badge">↗ TradingView widgets</span></div>
+      <div class="summary-grid">
+        <article class="card quote-card"><div class="card-head"><div><h3 class="card-title">ราคาและสรุปหุ้น <span id="quoteTitle">NVDA</span></h3><div class="card-sub">ข้อมูลจากวิดเจ็ตภายนอก · ไม่ดึงตัวเลขจากโมเดล AI</div></div><span class="micro-label">SYMBOL INFO</span></div><div class="card-body"><div id="symbolInfoWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>ราคาและข้อมูลตลาด</strong>กด “สร้าง Research Brief” เพื่อโหลดข้อมูลของหุ้นที่เลือก</div></div></div></div></article>
+        <article class="card"><div class="card-head"><div><h3 class="card-title">Booji’s daily lens 🐾</h3><div class="card-sub">คำถามที่ควรตอบให้ได้ก่อนซื้อหุ้นทุกตัว</div></div></div><div class="ai-placeholder"><div class="ai-avatar">🐱</div><div><h3>อย่าดูแค่ราคาขึ้นหรือลง</h3><p>ธุรกิจโตจริงไหม? กำไรกลายเป็นเงินสดหรือเปล่า? ราคาปัจจุบันเผื่อความผิดหวังไว้มากแค่ไหน? ใช้หัวข้อเหล่านี้เป็น checklist แล้วอ่านตัวเลขจริงประกอบ</p><p style="margin-top:12px"><b style="color:#1b5944">เป้าหมาย:</b> เข้าใจทั้งกรณีที่เราคิดถูกและกรณีที่เราคิดผิด</p></div></div></article>
+      </div>
+    </section>
 
-    <!-- Error State -->
-    <div id="errorState" class="hidden w-full max-w-4xl glass-card p-8 text-center bg-red-50 border-red-200">
-        <div class="text-red-500 text-5xl mb-4">❗</div>
-        <h2 class="text-xl font-bold text-red-700" id="errorText">เกิดข้อผิดพลาด</h2>
-        <button onclick="document.getElementById('errorState').classList.add('hidden')" class="mt-4 px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">ลองใหม่นะเมี้ยว 🔄</button>
-    </div>
+    <section class="section" id="aiAnalysis">
+      <div class="section-head"><div><div class="section-kicker">02 / Booji intelligence</div><h2 class="section-title">รายงานวิเคราะห์ที่อ่านรู้เรื่อง</h2><p class="section-desc">แยกเรื่องที่เป็นข้อเท็จจริงออกจากสมมติฐาน พร้อมคำอธิบายสำหรับคนทั่วไป</p></div><span class="badge">AI · Thai explain mode</span></div>
+      <article class="card" id="analysisCard"><div class="ai-placeholder"><div class="ai-avatar">✦</div><div><h3>รายงานของหุ้นที่คุณเลือกจะแสดงตรงนี้</h3><p>กด “สร้าง Research Brief” เพื่อสรุปโมเดลธุรกิจ ปัจจัยขับเคลื่อน งบการเงิน วิธีคิดเรื่องมูลค่า ความเสี่ยง และสิ่งที่ต้องติดตามต่อไป</p><p style="margin-top:7px">ถ้าไม่ได้วางตัวเลขประกอบ ระบบจะไม่แกล้งทำเหมือนอ่านงบล่าสุดให้แล้ว แต่จะบอกว่าควรดูบรรทัดไหนและแปลผลอย่างไร</p></div></div></article>
+    </section>
 
-    <!-- Report Area -->
-    <div id="reportArea" class="hidden w-full max-w-4xl space-y-6 mb-12"></div>
+    <section class="section" id="chart">
+      <div class="section-head"><div><div class="section-kicker">03 / Price action</div><h2 class="section-title">กราฟราคาและภาพเทคนิค</h2><p class="section-desc">ใช้กราฟเพื่อดูแนวโน้มและพฤติกรรมราคา ไม่ใช่คำสั่งซื้อขายอัตโนมัติ</p></div><span class="micro-label" id="chartSymbolLabel">NASDAQ:NVDA</span></div>
+      <article class="card chart-card"><div class="card-head"><div><h3 class="card-title">Advanced chart</h3><div class="card-sub">ปรับช่วงเวลา อินดิเคเตอร์ และรูปแบบกราฟได้ในวิดเจ็ต</div></div><a id="chartExternalLink" class="source-link" href="https://www.tradingview.com/chart/" target="_blank" rel="noopener noreferrer">เปิดกราฟเต็ม ↗</a></div><div class="card-body"><div id="advancedChartWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Interactive chart</strong>กราฟของหุ้นจะโหลดเมื่อเลือกหุ้นแล้ว</div></div></div></div></article>
+      <div class="widget-grid-2" style="margin-top:18px">
+        <article class="card technical-card"><div class="card-head"><div><h3 class="card-title">สัญญาณทางเทคนิค</h3><div class="card-sub">ค่าจาก TradingView · เลือกดูหลาย timeframes</div></div></div><div class="card-body"><div id="technicalWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Technical Analysis</strong>โหลดหลังเลือกหุ้น</div></div></div><p class="text-note">สัญญาณเทคนิคสะท้อนเงื่อนไขของอินดิเคเตอร์ตามช่วงเวลาที่เลือก ไม่ได้บอกอนาคตและอาจเปลี่ยนเร็ว</p></div></article>
+        <article class="card news-card"><div class="card-head"><div><h3 class="card-title">ข่าวและเรื่องที่ตลาดกำลังคุย</h3><div class="card-sub">ข่าวที่เกี่ยวข้องกับสัญลักษณ์หุ้นจาก TradingView</div></div></div><div class="card-body"><div id="newsWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Symbol news</strong>โหลดหลังเลือกหุ้น</div></div></div></div></article>
+      </div>
+    </section>
 
-    <script src="/script.js" defer></script>
+    <section class="section" id="fundamentals">
+      <div class="section-head"><div><div class="section-kicker">04 / Business quality</div><h2 class="section-title">งบการเงิน แปลเป็นภาษาคน</h2><p class="section-desc">ดูงบจาก TradingView แล้วใช้คู่มือด้านล่างแปลว่า “ตัวเลขนี้บอกอะไร” อย่าตัดสินจากค่าเดียว</p></div><span class="badge">Fundamentals first</span></div>
+      <div class="widget-grid-2">
+        <article class="card profile-card"><div class="card-head"><div><h3 class="card-title">บริษัททำเงินจากอะไร?</h3><div class="card-sub">Company profile · ธุรกิจและอุตสาหกรรม</div></div></div><div class="card-body"><div id="companyProfileWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Company profile</strong>รายละเอียดบริษัทจาก TradingView</div></div></div></div></article>
+        <article class="card financial-card"><div class="card-head"><div><h3 class="card-title">งบและตัวชี้วัดการเงิน</h3><div class="card-sub">Financials · ตัวเลขจริงจากวิดเจ็ต TradingView</div></div></div><div class="card-body"><div id="financialsWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Financials</strong>รายได้ กำไร และตัวชี้วัดของหุ้นที่เลือก</div></div></div></div></article>
+      </div>
+      <div style="margin:20px 0 12px"><div class="section-kicker">Booji translates finance</div><h3 style="margin:4px 0;font-size:18px">อ่านงบอย่างไรไม่ให้หลงกับตัวเลขสวย ๆ</h3><p class="section-desc">ใช้เกณฑ์เปรียบเทียบกับบริษัทเดิมในอดีตและธุรกิจประเภทเดียวกัน เพราะแต่ละอุตสาหกรรมใช้ตัวชี้วัดไม่เหมือนกัน</p></div>
+      <div class="beginner-grid">
+        <article class="lesson"><span class="lesson-icon">📈</span><h3>รายได้ (Revenue)</h3><p>ยอดขายกำลังโตหรือหด? ดูอย่างน้อยหลายไตรมาสและแยกว่าโตจากปริมาณ ราคา หรือการซื้อกิจการ</p><span class="rule">รายได้โต ≠ กำไรโตเสมอ</span></article>
+        <article class="lesson"><span class="lesson-icon">🧾</span><h3>อัตรากำไร (Margins)</h3><p>Gross margin คือกำไรหลังต้นทุนขาย, operating margin หักค่าใช้จ่ายดำเนินงาน และ net margin คือส่วนที่เหลือหลังรายการต่าง ๆ</p><span class="rule">มองแนวโน้มและเหตุผลที่เปลี่ยน</span></article>
+        <article class="lesson"><span class="lesson-icon">💵</span><h3>กระแสเงินสด (Cash flow)</h3><p>ธุรกิจแปลงกำไรบัญชีเป็นเงินสดได้จริงไหม? ดูเงินสดจากการดำเนินงานและ Free Cash Flow เทียบกับกำไรสุทธิ</p><span class="rule">กำไรดีแต่เงินสดไม่มา ต้องถามต่อ</span></article>
+        <article class="lesson"><span class="lesson-icon">🏦</span><h3>หนี้และสภาพคล่อง</h3><p>หนี้อยู่ในระดับที่แบกรับได้ไหม? ดูกำหนดชำระ ดอกเบี้ย เงินสด และกระแสเงินสด ไม่ใช่ดูหนี้ก้อนเดียว</p><span class="rule">อัตราส่วนต้องเทียบตามอุตสาหกรรม</span></article>
+        <article class="lesson"><span class="lesson-icon">🧮</span><h3>EPS และจำนวนหุ้น</h3><p>กำไรต่อหุ้นสะท้อนส่วนแบ่งกำไรต่อหุ้นหนึ่งหน่วย แต่การเพิ่มจำนวนหุ้นอาจลดส่วนแบ่งของผู้ถือหุ้นเดิมได้</p><span class="rule">ดู diluted EPS และ share count</span></article>
+        <article class="lesson"><span class="lesson-icon">🏷️</span><h3>P/E และมูลค่า</h3><p>P/E บอกว่าตลาดจ่ายกี่เท่าของกำไรต่อหุ้น แต่ P/E ต่ำอาจเพราะธุรกิจกำลังเสื่อม และ P/E สูงอาจสะท้อนการเติบโตที่คาดหวัง</p><span class="rule">เทียบการเติบโต ความเสี่ยง และคู่แข่ง</span></article>
+        <article class="lesson"><span class="lesson-icon">🛡️</span><h3>ROE / ROIC</h3><p>ดูว่าบริษัทสร้างผลตอบแทนจากทุนของผู้ถือหุ้นหรือเงินทุนที่ใช้ได้ดีแค่ไหน ตรวจด้วยว่าหนี้สูงเกินไปจนทำให้ ROE ดูดีหรือไม่</p><span class="rule">คุณภาพการลงทุนสำคัญกว่าค่าเดียว</span></article>
+        <article class="lesson"><span class="lesson-icon">🎁</span><h3>เงินปันผล</h3><p>ดู dividend yield คู่กับ payout ratio และ Free Cash Flow ปันผลสูงมากอาจเกิดจากราคาหุ้นร่วง ไม่ใช่เพราะธุรกิจแข็งแรง</p><span class="rule">เช็กความยั่งยืนก่อนมองเป็นรายได้</span></article>
+      </div>
+    </section>
+
+    <section class="section" id="forecast">
+      <div class="section-head"><div><div class="section-kicker">05 / Scenario lab</div><h2 class="section-title">ถ้าอนาคตไม่เป็นอย่างที่คิดล่ะ?</h2><p class="section-desc">จำลองผลพอร์ตภายใต้กรณีแย่ ฐาน และดี ปรับอัตราผลตอบแทนให้ตรงกับสมมติฐานของคุณได้ ไม่ใช้เป็นการทำนายราคาจริง</p></div><span class="badge">Interactive · What-if calculator</span></div>
+      <div class="forecast-layout">
+        <article class="card forecast-controls">
+          <h3 class="card-title">ตั้งสมมติฐานพอร์ต</h3><p class="card-sub">ใส่เงินในสกุลเดียวกันทุกช่อง ไม่รวมภาษี ค่าธรรมเนียม ปันผล และผลกระทบค่าเงิน</p>
+          <div class="control-grid" style="margin-top:16px">
+            <div class="control-field"><label for="initialCapital">เงินลงทุนเริ่มต้น</label><input type="number" id="initialCapital" min="0" step="1000" value="50000"></div>
+            <div class="control-field"><label for="monthlyContribution">เติมเงินต่อเดือน</label><input type="number" id="monthlyContribution" min="0" step="500" value="3000"></div>
+            <div class="control-field"><label for="projectionYears">จำลองกี่ปี</label><select id="projectionYears"><option value="1">1 ปี</option><option value="3">3 ปี</option><option value="5" selected>5 ปี</option><option value="10">10 ปี</option><option value="15">15 ปี</option><option value="20">20 ปี</option></select></div>
+            <div class="control-field"><label for="referencePrice">ราคาอ้างอิงต่อหุ้น (ไม่บังคับ)</label><input type="number" id="referencePrice" min="0" step="0.01" placeholder="กรอกเองจาก TradingView"></div>
+          </div>
+          <div class="assumptions"><div class="assumptions-title">ผลตอบแทนเฉลี่ยต่อปีที่สมมติเอง</div>
+            <div class="assumption-row"><span><i class="scenario-dot" style="background:#e36d74"></i>กรณีแย่ (Bear)</span><input id="bearRate" type="number" min="-80" max="100" step="1" value="-20" aria-label="ผลตอบแทนกรณีแย่เป็นเปอร์เซ็นต์"></div>
+            <div class="assumption-row"><span><i class="scenario-dot" style="background:#16a875"></i>กรณีฐาน (Base)</span><input id="baseRate" type="number" min="-80" max="100" step="1" value="8" aria-label="ผลตอบแทนกรณีฐานเป็นเปอร์เซ็นต์"></div>
+            <div class="assumption-row"><span><i class="scenario-dot" style="background:#4d89e7"></i>กรณีดี (Bull)</span><input id="bullRate" type="number" min="-80" max="100" step="1" value="20" aria-label="ผลตอบแทนกรณีดีเป็นเปอร์เซ็นต์"></div>
+          </div>
+          <p class="text-note">สมมติฐานเหล่านี้เป็นตัวอย่าง ไม่ใช่ค่าคาดการณ์จากโมเดล หุ้นจริงอาจขาดทุนหนักกว่ากรณีแย่หรือสูญเงินลงทุนเกือบทั้งหมดได้ การลงทุนรายเดือนคำนวณแบบปลายเดือนและทบต้นรายเดือน</p>
+        </article>
+        <article class="card forecast-results">
+          <div class="card-head" style="padding:0"><div><h3 class="card-title">ผลลัพธ์ตามสมมติฐาน</h3><div class="card-sub" id="forecastSubtitle">จำลอง 5 ปี · เงินและผลตอบแทนในหน่วยเดียวกันกับที่กรอก</div></div><span class="micro-label">NOT A PRICE TARGET</span></div>
+          <div class="scenario-cards" id="scenarioCards" style="margin-top:16px"></div>
+          <div class="chart-wrap"><div class="chart-top"><b>เส้นทางมูลค่าพอร์ตตามเวลา</b><span>หน่วยเดียวกับเงินลงทุน</span></div><svg id="forecastChart" viewBox="0 0 760 310" role="img" aria-label="กราฟจำลองมูลค่าพอร์ตตามสถานการณ์"></svg><div class="chart-legend"><span><i style="background:#e36d74"></i>กรณีแย่</span><span><i style="background:#16a875"></i>กรณีฐาน</span><span><i style="background:#4d89e7"></i>กรณีดี</span></div></div>
+          <div id="priceTargetNote" class="ai-disclaimer">กรอกราคาอ้างอิงจาก TradingView หากต้องการดู “ราคาสมมติ” ของหุ้นภายใต้ CAGR ที่ตั้งไว้ ราคาจะไม่ถูกดึงอัตโนมัติจากวิดเจ็ต</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="calendar">
+      <div class="section-head"><div><div class="section-kicker">06 / Macro radar</div><h2 class="section-title">ปฏิทินเศรษฐกิจและตัวเร่งตลาด</h2><p class="section-desc">หุ้นไม่ได้เคลื่อนไหวจากผลประกอบการอย่างเดียว ดอกเบี้ย เงินเฟ้อ การจ้างงาน และค่าเงินอาจเปลี่ยนระดับความเสี่ยง</p></div><span class="badge">Events & catalysts</span></div>
+      <div class="calendar-layout">
+        <article class="card calendar-card"><div class="card-head"><div><h3 class="card-title">Economic Calendar</h3><div class="card-sub">ปฏิทินเหตุการณ์เศรษฐกิจแบบฝังจาก TradingView</div></div></div><div class="card-body"><div id="economicCalendarWidget" class="tv-widget"><div class="widget-placeholder"><div><strong>Economic calendar</strong>กำลังโหลดปฏิทินตลาด…</div></div></div></div></article>
+        <aside class="card macro-note"><span class="eyebrow">MACRO CONTEXT</span><h3 style="margin-top:14px">ปฏิทินไม่ได้บอกทิศทางราคา</h3><p>ดูเวลาประกาศ ความคาดหวังของตลาด และผลจริงเทียบคาดการณ์ แล้วถามต่อว่าเหตุการณ์นั้นกระทบรายได้ ต้นทุนเงินทุน หรือความต้องการสินค้าของบริษัทที่เลือกอย่างไร</p>
+          <a class="macro-link" href="https://www.forexfactory.com/calendar" target="_blank" rel="noopener noreferrer"><span><b>Forex Factory Calendar</b><br><span>เปิดปฏิทินต้นทางเพื่อดู Actual / Forecast / Previous</span></span><strong>↗</strong></a>
+          <a class="macro-link" href="https://www.tradingview.com/economic-calendar/" target="_blank" rel="noopener noreferrer"><span><b>TradingView Economic Calendar</b><br><span>ดูเหตุการณ์เศรษฐกิจและตัวกรองผลกระทบ</span></span><strong>↗</strong></a>
+          <p style="font-size:10px;margin-top:15px">เราเปิด Forex Factory เป็นแหล่งต้นทางแทนการคัดลอกหรือเผยแพร่ข้อมูลของเขาซ้ำในเว็บไซต์นี้</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="daily">
+      <div class="section-head"><div><div class="section-kicker">07 / Make it a habit</div><h2 class="section-title">มุมเล็ก ๆ ที่ช่วยให้กลับมาใช้ทุกวัน</h2><p class="section-desc">เก็บรายการหุ้นที่สนใจไว้ในเบราว์เซอร์ และใช้ checklist ลดการตัดสินใจตามอารมณ์</p></div><span class="micro-label">บันทึกในเครื่องนี้เท่านั้น</span></div>
+      <div class="daily-grid">
+        <article class="card watchlist-panel"><h3 class="card-title">⭐ My watchlist</h3><p class="card-sub">เพิ่มหุ้นจากช่องค้นหาด้านบน รายการนี้เก็บอยู่ในเบราว์เซอร์เครื่องนี้</p><div id="watchlistItems" class="watchlist-items"></div><p id="watchlistEmpty" class="empty-note">ยังไม่มีรายการติดตาม — กรอก ticker แล้วกด ＋ เพื่อบันทึก</p></article>
+        <article class="card checklist"><h3 class="card-title">☑️ 60-second investing checklist</h3><p class="card-sub">เช็กก่อนซื้อหรือเพิ่มสถานะ รายการจะรีเซ็ตในวันถัดไป</p>
+          <label class="check-row"><input type="checkbox" class="daily-check" data-key="thesis"><span>ฉันอธิบายได้ว่าธุรกิจนี้ทำเงินจากอะไร<small>ถ้าบอกเหตุผลไม่ได้ใน 2–3 ประโยค อาจยังเข้าใจไม่พอ</small></span></label>
+          <label class="check-row"><input type="checkbox" class="daily-check" data-key="numbers"><span>ฉันดูแนวโน้มรายได้ กำไร และเงินสดแล้ว<small>ไม่ใช้ headline หรือ EPS ไตรมาสเดียวตัดสิน</small></span></label>
+          <label class="check-row"><input type="checkbox" class="daily-check" data-key="price"><span>ฉันมีเหตุผลรองรับราคาที่จ่าย<small>แยก “บริษัทดี” ออกจาก “หุ้นราคาน่าซื้อ”</small></span></label>
+          <label class="check-row"><input type="checkbox" class="daily-check" data-key="risk"><span>ฉันรู้ว่าอะไรจะทำให้สมมติฐานผิด<small>กำหนดความเสี่ยงและขนาดสถานะให้เหมาะกับตัวเอง</small></span></label>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer"><div><b>StockLens Booji</b> · Research desk for curious investors</div><div>เครื่องมือเพื่อการศึกษา ไม่ใช่คำแนะนำซื้อขาย · ข้อมูลตลาดจากผู้ให้บริการภายนอกอาจล่าช้า · ผลจำลองไม่รับประกันผลในอนาคต</div></footer>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="/script.js" defer></script>
 </body>
 </html>
