@@ -11,8 +11,8 @@ export default async function handler(req, res) {
         });
     }
 
-    // 💡 เปลี่ยนจาก v1beta เป็น v1 เพื่อให้รองรับ API Key ทั่วไปอย่างสมบูรณ์
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+    // 💡 เปลี่ยนมาใช้ gemini-pro ซึ่งเป็นชื่อโมเดลมาตรฐานดั้งเดิมที่รองรับกับทุก API Key ของ Google แบบ 100%
+    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
 
     try {
         const response = await fetch(url, {
