@@ -1,5 +1,8 @@
 {
   "name": "stocklens-booji-v4",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
 }

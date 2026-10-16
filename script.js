@@ -34,6 +34,74 @@ function formatSigned(n) {
   if (!Number.isFinite(n)) return '—';
   return `${n > 0 ? '+' : ''}${n.toFixed(1)}%`;
 }
+function formatPercent(n, digits = 1) { return Number.isFinite(n) ? `${n > 0 ? '+' : ''}${n.toFixed(digits)}%` : '—'; }
+function marketTime(iso) {
+  if (!iso) return 'วันที่ไม่พร้อม';
+  return new Intl.DateTimeFormat('th-TH', { dateStyle: 'medium', timeZone: 'America/New_York' }).format(new Date(iso));
+}
+function marketMetricCard(data, label, options = {}) {
+  if (!data) return `<article class="market-metric"><div class="metric-name">${escapeHtml(label)}</div><div class="metric-value neutral">N/A</div><div class="metric-detail">ข้อมูลไม่พร้อมจากผู้ให้บริการ</div></article>`;
+  const value = options.kind === 'yield' ? `${data.last.toFixed(2)}%` : options.kind === 'volatility' ? data.last.toFixed(2) : data.last.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const change = data.dailyChangePct;
+  const tone = Number.isFinite(change) ? (change > 0 ? 'positive' : change < 0 ? 'negative' : 'neutral') : 'neutral';
+  const trend = data.aboveEma200 == null ? 'EMA 200: ข้อมูลไม่ครบ' : `${data.aboveEma200 ? 'เหนือ' : 'ต่ำกว่า'} EMA 200`;
+  return `<article class="market-metric"><div class="metric-name">${escapeHtml(label)}</div><div class="metric-value">${escapeHtml(value)}</div><div class="metric-change ${tone}">${escapeHtml(formatPercent(change))} 1 วัน</div><div class="metric-detail">${trend} · ปิด ${escapeHtml(marketTime(data.asOf))}</div></article>`;
+}
+function renderMarket(payload) {
+  const labels = [['sp500','S&P 500'],['nasdaq','Nasdaq Composite'],['russell','Russell 2000'],['vix','VIX'],['yield10y','US 10Y yield'],['dxy','US Dollar Index']];
+  $('marketCards').innerHTML = labels.map(([key, label]) => marketMetricCard(payload.metrics?.[key], label, { kind: key === 'vix' ? 'volatility' : key === 'yield10y' ? 'yield' : 'index' })).join('');
+  const regime = payload.regime || { label: 'Data unavailable', reason: 'ไม่สามารถคำนวณ regime ได้' };
+  $('marketRegimeBadge').textContent = regime.label;
+  $('marketRegimeText').textContent = regime.reason;
+  const breadth = payload.watchlistBreadth;
+  const reasons = [];
+  if (breadth) reasons.push(`<span class="market-reason ${breadth.aboveEma200Pct >= 60 ? 'good' : breadth.aboveEma200Pct < 40 ? 'bad' : 'caution'}">${breadth.aboveEma200Pct.toFixed(0)}% อยู่เหนือ EMA 200 ในหุ้น ${breadth.sampleSize} ตัวที่ส่งตรวจ</span>`);
+  if (payload.metrics?.vix) reasons.push(`<span class="market-reason ${payload.metrics.vix.last >= 30 ? 'bad' : payload.metrics.vix.last >= 20 ? 'caution' : 'good'}">VIX ${payload.metrics.vix.last.toFixed(1)}${payload.metrics.vix.last >= 30 ? ' · volatility สูง' : payload.metrics.vix.last >= 20 ? ' · volatility ระดับกลาง' : ' · ต่ำกว่า 20'}</span>`);
+  $('marketReasons').innerHTML = reasons.length ? reasons.join('') : '<span class="market-reason">ยังไม่มี breadth จากชุด ticker</span>';
+  $('marketStatus').classList.toggle('error', !payload.metrics?.sp500 || !payload.metrics?.nasdaq);
+  $('marketStatus').textContent = `Yahoo Finance · ดึงข้อมูล ${new Date(payload.fetchedAt).toLocaleString('th-TH')} · ราคาปิดรายวันอาจล่าช้า${payload.metrics?.sp500 ? '' : ' · บางดัชนีไม่พร้อมใช้งาน'}`;
+}
+function renderScanResults(items) {
+  const aboveOnly = $('aboveEmaFilter').checked;
+  const minReturn = Number($('minReturnFilter').value);
+  const usable = items.filter(item => !item.error && (!aboveOnly || item.aboveEma200) && (item.return20dPct ?? -Infinity) >= minReturn);
+  const rows = usable.map(item => {
+    const status = item.aboveEma200 == null ? '<span class="scan-pill na">N/A</span>' : `<span class="scan-pill ${item.aboveEma200 ? '' : 'below'}">${item.aboveEma200 ? 'เหนือ' : 'ต่ำกว่า'}</span>`;
+    const slope = Number.isFinite(item.emaSlope20dPct) ? formatPercent(item.emaSlope20dPct) : '—';
+    return `<tr><td>${escapeHtml(item.symbol)}</td><td>${Number(item.last).toLocaleString('en-US',{maximumFractionDigits:2})}</td><td>${status}</td><td>${escapeHtml(slope)}</td><td>${escapeHtml(formatPercent(item.return20dPct))}</td><td>${Number(item.low52w).toLocaleString('en-US',{maximumFractionDigits:2})} – ${Number(item.high52w).toLocaleString('en-US',{maximumFractionDigits:2})}</td><td>${escapeHtml(marketTime(item.asOf))}</td></tr>`;
+  });
+  const failures = items.filter(item => item.error).map(item => `<tr><td>${escapeHtml(item.symbol)}</td><td colspan="6" class="negative">ข้อมูลไม่พร้อม: ${escapeHtml(item.error)}</td></tr>`);
+  $('scanResults').innerHTML = rows.concat(failures).join('') || '<tr><td colspan="7" class="scan-empty">ไม่มีหุ้นที่ตรงกับตัวกรอง</td></tr>';
+}
+async function requestMarket(symbols = []) {
+  const query = symbols.length ? `?symbols=${encodeURIComponent(symbols.join(','))}` : '';
+  const response = await fetch(`/api/market${query}`);
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || !payload.ok) throw new Error(payload.error || `Market API returned ${response.status}`);
+  return payload;
+}
+async function loadMarketRadar() {
+  const status = $('marketStatus');
+  status.classList.remove('error'); status.textContent = 'กำลังโหลดดัชนีและข้อมูลรายวัน…';
+  try { const payload = await requestMarket(scanSymbols()); renderMarket(payload); }
+  catch (error) { status.classList.add('error'); status.textContent = `ตลาดโหลดไม่สำเร็จ: ${error.message} · ข้อมูลวิดเจ็ต TradingView และส่วนอื่นยังใช้งานแยกได้`; }
+}
+function scanSymbols() {
+  return [...new Set($('scanTickers').value.toUpperCase().split(/[\s,]+/).map(value => value.trim()).filter(value => /^[A-Z0-9.^_-]{1,15}$/.test(value) && !value.startsWith('^'))) ].slice(0, 12);
+}
+async function runScanner() {
+  const symbols = scanSymbols();
+  if (!symbols.length) { $('scanStatus').classList.add('error'); $('scanStatus').textContent = 'กรอก ticker สหรัฐฯ ที่ถูกต้องอย่างน้อย 1 ตัว'; return; }
+  const button = $('scanBtn'); button.disabled = true; button.textContent = 'กำลังสแกน…';
+  $('scanStatus').classList.remove('error'); $('scanStatus').textContent = `กำลังดึงราคาของ ${symbols.length} ticker…`;
+  try {
+    const payload = await requestMarket(symbols);
+    renderScanResults(payload.equities || []);
+    $('scanStatus').textContent = `${payload.provider} · ราคาปิดล่าสุดที่มี · อัปเดต ${new Date(payload.fetchedAt).toLocaleString('th-TH')} · ${payload.equities.filter(item => !item.error).length}/${symbols.length} ticker สำเร็จ`;
+    renderMarket(payload);
+  } catch (error) { $('scanStatus').classList.add('error'); $('scanStatus').textContent = `สแกนไม่สำเร็จ: ${error.message}`; }
+  finally { button.disabled = false; button.textContent = 'สแกนหุ้น'; }
+}
 function plainTicker() { return $('ticker').value.trim().toUpperCase(); }
 
 const NASDAQ = new Set(['NVDA','AAPL','MSFT','GOOGL','GOOG','AMZN','META','TSLA','AMD','AVGO','NFLX','COST','ADBE','PLTR','INTC','QCOM','CSCO','PEP','TXN','MU','SMCI','ARM','PANW','CRWD','PYPL','SHOP','UBER','ISRG','BKNG','MELI','TSM']);
@@ -537,6 +605,11 @@ document.querySelectorAll('#mainNav a').forEach(a=>a.addEventListener('click',()
 
 renderHistory(); renderWatchlist(); renderForecast(); setupChecklist(); mountTickerTape(); mountEconomicCalendar(); mountAssetFlowWidget();
 $('refreshNewsBtn').addEventListener('click',()=>{refreshDailyNews(plainTicker(),$('market').value);notify('กำลังอัปเดตข่าวล่าสุด');});
+$('refreshMarketBtn').addEventListener('click',loadMarketRadar);
+$('scanBtn').addEventListener('click',runScanner);
+$('aboveEmaFilter').addEventListener('change',runScanner);
+$('minReturnFilter').addEventListener('change',runScanner);
+$('scanTickers').addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&event.key==='Enter')runScanner();});
 $('buildFinanceChartBtn').addEventListener('click',drawFinanceComparison);
 $('clearFinanceChartBtn').addEventListener('click',clearFinanceComparison);
 ['financeUnit','financePeriodPrev','financePeriodNow','finRevenuePrev','finRevenueNow','finProfitPrev','finProfitNow','finCashPrev','finCashNow'].forEach(id=>$(id).addEventListener('change',()=>{ if(['finRevenuePrev','finRevenueNow','finProfitPrev','finProfitNow','finCashPrev','finCashNow'].some(k=>$(k).value.trim()!=='')) drawFinanceComparison(); }));
@@ -544,3 +617,4 @@ $('clearFinanceChartBtn').addEventListener('click',clearFinanceComparison);
 mountMarketTopStories();
 mountStockWidgets(getTvSymbol('NVDA','US'));
 refreshDailyNews('NVDA','US');
+runScanner();
