@@ -115,8 +115,8 @@ export function marketScore(metrics = {}) {
 export function riskReward({ entry, stop, target, portfolio, riskPct, maxPosition }) {
   const values = [entry, stop, target, portfolio, riskPct, maxPosition];
   if (values.some(value => !Number.isFinite(value)) || entry <= 0 || stop <= 0 || target <= 0 || portfolio < 0 || riskPct < 0 || maxPosition < 0) return { error: 'กรอกค่าบวกให้ครบ ยกเว้น Portfolio value ใช้ 0 ได้' };
-  if (stop >= entry) return { error: 'Invalidation/Stop ต้องต่ำกว่า Entry สำหรับแผน Long' };
-  if (target <= entry) return { error: 'Target ต้องสูงกว่า Entry สำหรับแผน Long' };
+  if (stop >= entry) return { error: 'จุดตัดขาดทุนต้องต่ำกว่าราคาเข้า สำหรับแผนซื้อ' };
+  if (target <= entry) return { error: 'ราคาเป้าหมายต้องสูงกว่าราคาเข้า สำหรับแผนซื้อ' };
   const riskPerShare = entry - stop;
   const rewardPerShare = target - entry;
   const budget = portfolio * riskPct / 100;
