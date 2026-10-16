@@ -43,7 +43,7 @@ function updateModeUI(){
 }
 
 function goPage(name){
-  if(!document.querySelector(`#page-${name}`))name='overview';
+  if(!['overview','watchlist','paper','settings'].includes(name)||!document.querySelector(`#page-${name}`))name='overview';
   state.page=name;
   $$('.page').forEach(page=>page.classList.toggle('active',page.id===`page-${name}`));
   $$('.nav-item').forEach(item=>item.classList.toggle('active',item.dataset.page===name));
@@ -74,12 +74,11 @@ async function loadOverview(force=false){
   $('#marketUpdated').textContent='กำลังโหลดข้อมูล…';
   state.marketError='';
   try{
-    const [market,watch,sectors]=await Promise.all([
+    const [market,watch]=await Promise.all([
       fetchMarket([],true,force),
-      currentWatchSymbols().length?fetchMarket(currentWatchSymbols(),false,force):Promise.resolve({equities:[]}),
-      fetchMarket([...sectorDefs.map(item=>item[0]),'SPY'],false,force)
+      currentWatchSymbols().length?fetchMarket(currentWatchSymbols(),false,force):Promise.resolve({equities:[]})
     ]);
-    state.market=market;state.watchData=watch.equities||[];state.sectors=sectorDefs.map(([symbol,name,short])=>({...findEquity(sectors,symbol),symbol,name,short})).filter(item=>item.last);
+    state.market=market;state.watchData=watch.equities||[];
     if(dataMode()==='live'){
       state.newsError='';
       try{const news=await fetchNews({market:true});state.news=news.items||[];}catch(error){state.news=[];state.newsError=error.message;}
@@ -96,24 +95,22 @@ function renderOverview(){
   const regime=state.market?.regime||marketRegime(metrics);
   $('#regimeLabel').textContent=state.marketError?'ยังไม่มีข้อมูล':regimeThai(regime.label);
   $('#regimeChip').textContent=dataMode()==='demo'?'ข้อมูลสาธิต · คำนวณตามกฎ':'คำนวณตามกฎ';
-  $('#regimeCopy').textContent=state.marketError?`โหลดข้อมูลไม่สำเร็จ: ${uiError({message:state.marketError})}`:'พิจารณาดัชนีหลัก เส้นค่าเฉลี่ย และดัชนี VIX รวมถึงผลตอบแทนหุ้นเล็กเทียบหุ้นใหญ่';
+  $('#regimeCopy').textContent=state.marketError?`โหลดข้อมูลไม่สำเร็จ: ${uiError({message:state.marketError})}`:'สรุปจากดัชนีตลาดหลักและระดับความผันผวน เพื่อเช็กภาพรวมก่อนเริ่มวัน';
   $('#regimeScoreBar').style.width=Number.isFinite(regime.score)?`${Math.max(5,Math.min(100,(regime.score+5)*10))}%`:'0%';
   $('#regimePressure').textContent=Number.isFinite(regime.score)?`${regime.score>0?'+':''}${regime.score.toFixed(1)} / 5`:'—';
   $('#regimeReasons').innerHTML=(regime.reasons||[]).slice(0,5).map(reason=>`<span class="reason">${escape(translateReason(reason))}</span>`).join('')||'<span class="reason">ข้อมูลไม่พอสำหรับจัดภาวะตลาด</span>';
   $('#regimeLabel').className=regime.tone==='positive'?'positive':regime.tone==='negative'?'negative':'';
-  const keys=[['sp500','ดัชนี S&P 500'],['nasdaq','ดัชนี Nasdaq'],['russell','ดัชนี Russell 2000'],['vix','ดัชนีความผันผวน VIX'],['yield10y','พันธบัตรรัฐบาลสหรัฐฯ 10 ปี'],['dxy','ดัชนีค่าเงินดอลลาร์']];
-  $('#marketMetrics').innerHTML=keys.map(([key,label])=>{const m=metricValue(metrics[key],key);return `<article class="metric-card"><div class="metric-card-head"><span>${label}</span><span class="trend-arrow">${m.tone==='positive'?'↗':m.tone==='negative'?'↘':'·'}</span></div><strong>${escape(m.value)}</strong><span class="metric-change ${m.tone}">${escape(m.detail.split(' · ')[0])}</span><small>${escape(m.detail.split(' · ').slice(1).join(' · '))}</small></article>`;}).join('');
-  const breadth=computeBreadth(state.watchData);const value=breadth?breadth.pct:0;
-  $('#breadthValue').textContent=breadth?`${Math.round(value)}%`:'—';$('#breadthCount').textContent=breadth?`${breadth.above} / ${breadth.sample}`:'—';$('#breadthUniverse').textContent=breadth?`${breadth.sample} หุ้นในรายการ`:'กลุ่มหุ้นที่ติดตาม';
-  $('#breadthTrack').style.width=`${value}%`;$('#breadthDonut').style.background=`conic-gradient(var(--teal) 0 ${value}%,#2b3b4a ${value}% 100%)`;
-  renderBrief(regime,metrics);renderImportantAlerts(regime,metrics,breadth);renderNewsSummary();renderSectorPulse();renderOverviewWatch();
+  const keys=[['sp500','S&P 500'],['nasdaq','Nasdaq'],['vix','VIX · ความผันผวน']];
+  $('#marketMetrics').innerHTML=keys.map(([key,label])=>{const m=metricValue(metrics[key],key);return `<article class="metric-card"><div class="metric-card-head"><span>${label}</span><span class="trend-arrow">${m.tone==='positive'?'↗':m.tone==='negative'?'↘':'·'}</span></div><strong>${escape(m.value)}</strong><span class="metric-change ${m.tone}">${escape(m.detail.split(' · ')[0])}</span></article>`;}).join('');
+  const breadth=computeBreadth(state.watchData);
+  renderBrief(regime,metrics);renderImportantAlerts(regime,metrics,breadth);renderNewsSummary();renderOverviewWatch();
   $('#marketUpdated').textContent=state.marketError?`ไม่มีข้อมูล · ${uiError({message:state.marketError})}`:`${state.market?.provider||'—'} · อัปเดต ${fullTime(state.market?.fetchedAt)}`;
 }
 function renderBrief(regime,metrics){
   const items=[];
-  items.push(`ภาวะตลาด: ${regimeThai(regime.label)} · ${translateReason(regime.reasons?.[0]||'ข้อมูลดัชนียังไม่ครบ')}`);
-  if(metrics.russell&&metrics.sp500)items.push(`หุ้นขนาดเล็กเทียบ S&P 500 ใน 20 วัน: ${pct(metrics.russell.return20dPct-metrics.sp500.return20dPct)} (ส่วนต่างผลตอบแทน)`);
-  if(metrics.vix)items.push(`VIX ${money(metrics.vix.last,2)} · ${metrics.vix.last>=30?'ความผันผวนสูง':'ต่ำกว่าระดับ 30'} · ไม่ใช่ตัววัดจำนวนหุ้นขึ้นลง`);
+  if(!state.marketError)items.push(`ตลาด ${regimeThai(regime.label)}${regime.reasons?.[0]?` · ${translateReason(regime.reasons[0])}`:''}`);
+  if(metrics.sp500&&metrics.nasdaq)items.push(`S&P 500 ${pct(metrics.sp500.dailyChangePct)} · Nasdaq ${pct(metrics.nasdaq.dailyChangePct)} เมื่อปิดตลาดล่าสุด`);
+  if(metrics.vix)items.push(`VIX ${money(metrics.vix.last,2)} · ${metrics.vix.last>=30?'ความผันผวนสูง':'ความผันผวนยังไม่ถึงระดับสูง'}`);
   if(state.marketError)items.push(`ข้อมูลตลาดไม่พร้อม: ${uiError({message:state.marketError})}`);
   $('#briefList').innerHTML=items.map(item=>`<div class="brief-item"><i>›</i><span>${escape(item)}</span></div>`).join('');
   $('#briefStatus').textContent=state.marketError?'ไม่มีข้อมูล':'สรุปตามกฎ';
@@ -155,7 +152,7 @@ function setupFor(item){
 function renderOverviewWatch(){
   const items=state.watchData||[];
   $('#overviewEmpty').classList.toggle('hidden',items.length>0);
-  $('#overviewWatchRows').innerHTML=items.length?items.map(item=>`<tr><td><button class="ticker-link" data-analysis-symbol="${escape(item.symbol)}">${escape(item.symbol)}</button></td><td>${money(item.last)}</td><td class="${item.dailyChangePct>=0?'positive':'negative'}">${pct(item.dailyChangePct)}</td><td>${item.aboveEma200==null?'—':`<span class="status-pill ${item.aboveEma200?'':'unavailable'}">${item.aboveEma200?'เหนือ':'ต่ำกว่า'} · ${pct((item.last/item.ema200-1)*100)}</span>`}</td><td>${pct(item.return20dPct)}</td><td>${translateSetup(setupFor(item))}</td></tr>`).join(''):'<tr><td colspan="6" class="no-data">เพิ่มหุ้นในรายการติดตามเพื่อดูข้อมูล</td></tr>';
+  $('#overviewWatchRows').innerHTML=items.length?items.slice(0,5).map(item=>`<tr><td><b>${escape(item.symbol)}</b></td><td>${money(item.last)}</td><td class="${item.dailyChangePct>=0?'positive':'negative'}">${pct(item.dailyChangePct)}</td><td><a class="chart-link" href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(item.symbol)}" target="_blank" rel="noopener noreferrer">เปิดกราฟ ↗</a></td></tr>`).join(''):'<tr><td colspan="4" class="no-data">เพิ่มหุ้นที่อยากติดตาม แล้วเช็กความเคลื่อนไหวได้ที่นี่</td></tr>';
 }
 function translateSetup(value){return ({'Below EMA 200':'ต่ำกว่า EMA 200','Extended':'ราคายืดตัวมาก','Breakout Watch':'เฝ้าดูการทะลุกรอบ','Pullback':'ย่อตัวใกล้แนวโน้ม','Trend Strong':'แนวโน้มแข็งแรง','Base Building':'สร้างฐานราคา','Unavailable':'ไม่มีข้อมูล'})[value]||value;}
 
@@ -396,7 +393,7 @@ function clearWorkspaceData(){if(!confirm('ลบรายการหุ้น 
 function bindEvents(){
   document.addEventListener('click',event=>{
     const page=event.target.closest('[data-page]');if(page){goPage(page.dataset.page);return;}
-    const analysis=event.target.closest('[data-analysis-symbol]');if(analysis){state.analysisSymbol=analysis.dataset.analysisSymbol;$('#globalTicker').value=state.analysisSymbol;goPage('analysis');return;}
+    const analysis=event.target.closest('[data-analysis-symbol]');if(analysis){window.open(`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(analysis.dataset.analysisSymbol)}`,'_blank','noopener');return;}
     const sector=event.target.closest('[data-sector]');if(sector){showSector(sector.dataset.sector);return;}
     const flow=event.target.closest('[data-flow-symbol]');if(flow){state.analysisSymbol=flow.dataset.flowSymbol;$('#globalTicker').value=state.analysisSymbol;goPage('analysis');return;}
     const add=event.target.closest('[data-add-watch]');if(add){addWatch(add.dataset.addWatch);return;}
@@ -414,7 +411,7 @@ function bindEvents(){
   });
   $('#mobileNavBtn').addEventListener('click',()=>{const open=$('#sidebar').classList.toggle('open');$('#mobileNavBtn').setAttribute('aria-expanded',String(open));});
   $('#modeChip').addEventListener('click',()=>goPage('settings'));
-  $('#globalTicker').addEventListener('keydown',event=>{if(event.key==='Enter'){state.analysisSymbol=$('#globalTicker').value.trim().toUpperCase();goPage('analysis');}});
+  $('#globalTicker').addEventListener('keydown',event=>{if(event.key==='Enter'){const symbol=$('#globalTicker').value.trim().toUpperCase();if(symbol)window.open(`https://www.tradingview.com/chart/?symbol=${encodeURIComponent(symbol)}`,'_blank','noopener');}});
   $('#topAddWatch').addEventListener('click',()=>addWatch($('#globalTicker').value));
   $('#refreshAll').addEventListener('click',()=>loadOverview(true));
   $('#refreshAnalysis').addEventListener('click',()=>loadAnalysis(true));$('#analysisAddWatch').addEventListener('click',()=>addWatch(state.analysisSymbol));
@@ -443,3 +440,4 @@ function init(){
   if($('#screenRows')&&state.page==='screener')loadScreener();
 }
 init();
+

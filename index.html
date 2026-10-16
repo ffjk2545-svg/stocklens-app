@@ -18,16 +18,9 @@
       </a>
       <div class="workspace-label">พื้นที่ทำงาน <span class="live-dot"></span></div>
       <nav class="main-nav" aria-label="เมนูหลัก">
-        <button class="nav-item active" data-page="overview"><span class="nav-icon">◈</span><span>ภาพรวมตลาด</span><kbd>01</kbd></button>
-        <button class="nav-item" data-page="flow"><span class="nav-icon">⇄</span><span>แรงซื้อขาย</span><kbd>02</kbd></button>
-        <button class="nav-item" data-page="sectors"><span class="nav-icon">▦</span><span>หมุนเวียนรายอุตสาหกรรม</span><kbd>03</kbd></button>
-        <button class="nav-item" data-page="screener"><span class="nav-icon">⌕</span><span>ค้นหาหุ้น</span><kbd>04</kbd></button>
-        <button class="nav-item" data-page="analysis"><span class="nav-icon">⌁</span><span>วิเคราะห์หุ้น</span><kbd>05</kbd></button>
-        <button class="nav-item" data-page="earnings"><span class="nav-icon">▤</span><span>อ่านงบการเงิน</span><kbd>06</kbd></button>
-        <button class="nav-item" data-page="paper"><span class="nav-icon">▧</span><span>จำลองลงทุน</span><kbd>07</kbd></button>
-        <div class="nav-divider"></div>
+        <button class="nav-item active" data-page="overview"><span class="nav-icon">◈</span><span>สรุปวันนี้</span></button>
         <button class="nav-item" data-page="watchlist"><span class="nav-icon">☆</span><span>รายการหุ้นติดตาม</span><span class="nav-count" id="watchCount">0</span></button>
-        <button class="nav-item" data-page="journal"><span class="nav-icon">▤</span><span>บันทึกแผนลงทุน</span></button>
+        <button class="nav-item" data-page="paper"><span class="nav-icon">▧</span><span>จำลองลงทุน</span></button>
         <button class="nav-item" data-page="settings"><span class="nav-icon">◉</span><span>ตั้งค่าและแหล่งข้อมูล</span></button>
       </nav>
       <div class="sidebar-bottom"><div class="system-card"><span class="system-dot"></span><div><b id="sidebarMode">โหมดสาธิต</b><small id="sidebarSource">ข้อมูลในเบราว์เซอร์ · ไม่ซิงก์ข้ามเครื่อง</small></div></div><small class="sidebar-foot">StockLens Radar <span>v1.0</span></small></div>
@@ -38,7 +31,7 @@
         <button id="mobileNavBtn" class="mobile-nav-btn" aria-label="เปิดเมนู" aria-expanded="false"><span></span><span></span></button>
         <div class="crumbs"><span>เรดาร์</span><i>/</i><b id="pageCrumb">ภาพรวมตลาด</b></div>
         <div class="top-actions">
-          <label class="global-search"><span aria-hidden="true">⌕</span><input id="globalTicker" placeholder="ค้นหาหุ้น เช่น NVDA" maxlength="15" aria-label="ค้นหาหุ้นด้วยชื่อย่อ"></label>
+          <label class="global-search"><span aria-hidden="true">⌕</span><input id="globalTicker" placeholder="ค้นหากราฟ เช่น NVDA" maxlength="15" aria-label="ค้นหากราฟหุ้นใน TradingView"></label>
           <button id="topAddWatch" class="icon-action" title="เพิ่มหุ้นที่ค้นหาเข้ารายการติดตาม" aria-label="เพิ่มเข้ารายการติดตาม">＋</button>
           <button class="mode-chip" id="modeChip" aria-label="เปลี่ยนโหมดข้อมูล"><i></i><span>ข้อมูลสาธิต</span><b>⌄</b></button>
         </div>
@@ -46,22 +39,21 @@
       <div class="demo-banner" id="dataBanner"><strong>ข้อมูลสาธิต — ไม่ใช่ข้อมูลตลาดจริง</strong><span>ตัวเลขจำลองเพื่อทดลองใช้งานเท่านั้น</span><button data-page="settings">ตั้งค่าแหล่งข้อมูล <span>→</span></button></div>
 
       <main id="mainContent">
-        <section class="page active" id="page-overview" data-title="ภาพรวมตลาด">
-          <div class="page-heading"><div><p class="eyebrow"><span id="overviewDate">ข้อมูลตลาด</span> <span class="heading-dot"></span> สรุปประจำวัน</p><h1>เห็นแรงตลาด <em>อ่านจังหวะลงทุน</em></h1><p>สรุปตลาดวันนี้ · ดูสัญญาณสำคัญ · รู้ว่าควรติดตามอะไรต่อ</p></div><button class="btn btn-quiet" id="refreshAll">↻ <span>อัปเดตข้อมูล</span></button></div>
-          <details class="guide-card"><summary>หน้านี้มีอะไร · อ่านใน 30 วินาที</summary><p>ดูแนวโน้มดัชนีหลัก ความผันผวน ข่าว และสัดส่วนหุ้นในรายการติดตามที่อยู่เหนือเส้นค่าเฉลี่ยระยะยาว สรุปเป็นข้อมูลประกอบการศึกษา ไม่ใช่คำสั่งซื้อขาย</p></details>
-          <article class="panel important-alert-panel"><div class="panel-top"><div><span class="eyebrow">สัญญาณจากข้อมูลที่มี</span><h2>แจ้งเตือนสำคัญ</h2></div><span class="status-pill" id="importantAlertCount">กำลังตรวจ</span></div><div id="importantAlerts" class="important-alert-list"></div></article>
-          <div class="overview-grid">
-            <article class="panel regime-panel"><div class="panel-top"><div><span class="eyebrow">ภาวะตลาดโดยรวม</span><h2 id="regimeLabel">กำลังวิเคราะห์</h2></div><span class="regime-chip" id="regimeChip">ข้อมูลสาธิต</span></div><p id="regimeCopy" class="regime-copy">ประเมินจากดัชนีหลัก เส้นค่าเฉลี่ย และความผันผวน · เลือกโหมดข้อมูลจริงได้ที่หน้าตั้งค่า</p><div class="regime-bar"><span id="regimeScoreBar"></span></div><div class="regime-foot"><span>แรงกดดันตลาด</span><b id="regimePressure">—</b></div><div id="regimeReasons" class="reason-list"></div></article>
-            <article class="panel brief-panel"><div class="panel-top"><div><span class="eyebrow">สรุปประจำวัน</span><h2>ภาพรวมใน 30 วินาที</h2></div><span class="status-pill" id="briefStatus">สรุปตามกฎ</span></div><div id="briefList" class="brief-list"></div><div id="newsSummary" class="news-summary"></div><p class="panel-foot">คำนวณจากข้อมูลตลาด · แสดงหัวข้อข่าวตามต้นทาง ไม่มีการแต่งผลกระทบ</p></article>
+        <section class="page active" id="page-overview" data-title="สรุปวันนี้">
+          <div class="page-heading morning-heading"><div><p class="eyebrow">เช็กตลาดก่อนเริ่มวัน <span class="heading-dot"></span> <span id="overviewDate">วันนี้</span></p><h1>เมื่อคืนตลาดเป็นอย่างไร</h1><p>สรุปสั้น ๆ จากดัชนีหลัก ข่าว และหุ้นที่คุณติดตาม</p></div><button class="btn btn-primary" id="refreshAll">↻ อัปเดตสรุป</button></div>
+          <div class="morning-layout">
+            <div class="morning-main">
+              <article class="panel morning-verdict"><div class="morning-verdict-head"><div><span class="eyebrow">ภาพรวมในประโยคเดียว</span><h2 id="regimeLabel">กำลังสรุปตลาด…</h2></div><span class="status-pill" id="regimeChip">ข้อมูลสาธิต</span></div><p id="regimeCopy">อิงการเปลี่ยนแปลงของดัชนีหลักและความผันผวน</p><div id="briefList" class="morning-points"></div><span id="briefStatus" class="hidden">สรุปตามกฎ</span><div id="regimeReasons" class="hidden"></div><div class="hidden"><span id="regimePressure"></span><span id="regimeScoreBar"></span></div></article>
+              <section class="morning-section"><div class="section-title-row"><div><span class="eyebrow">ตัวเลขสำคัญ</span><h2>ตลาดสหรัฐฯ ล่าสุด</h2></div><span class="data-stamp" id="marketUpdated">รอข้อมูล</span></div><div class="metric-grid morning-metrics" id="marketMetrics"></div></section>
+              <section class="morning-section"><div class="section-title-row"><div><span class="eyebrow">หุ้นที่คุณเลือกไว้</span><h2>มีอะไรขยับบ้าง</h2></div><button class="text-button" data-page="watchlist">จัดการรายการ →</button></div><article class="panel table-panel morning-watch"><div class="table-scroll"><table><thead><tr><th>หุ้น</th><th>ราคาล่าสุด</th><th>เปลี่ยนแปลง</th><th>กราฟ</th></tr></thead><tbody id="overviewWatchRows"></tbody></table></div><div class="empty-state hidden" id="overviewEmpty">ยังไม่มีหุ้นติดตาม · เพิ่มชื่อย่อจากหน้ารายการหุ้น</div></article></section>
+            </div>
+            <aside class="morning-side">
+              <article class="panel important-alert-panel"><div class="panel-top"><div><span class="eyebrow">เฉพาะสัญญาณที่เข้าเกณฑ์</span><h2>เรื่องที่ควรรู้</h2></div><span class="status-pill" id="importantAlertCount">กำลังตรวจ</span></div><div id="importantAlerts" class="important-alert-list"></div></article>
+              <article class="panel morning-news-panel"><div class="panel-top"><div><span class="eyebrow">อ่านต่อเมื่อมีเวลา</span><h2>ข่าวตลาด</h2></div></div><div id="newsSummary" class="news-summary"></div><p class="panel-foot">พาดหัวจากต้นทาง · เปิดอ่านเนื้อหาฉบับเต็มที่สำนักข่าว</p></article>
+              <a class="tradingview-cta" href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer"><span><b>อยากดูกราฟละเอียด?</b><small>เปิด TradingView สำหรับเครื่องมือเชิงลึก</small></span><strong>↗</strong></a>
+              <div class="morning-disclaimer">สรุปตามข้อมูลที่โหลดได้ · ไม่ใช่คำแนะนำซื้อขาย · ราคาอาจล่าช้า</div>
+            </aside>
           </div>
-          <div class="section-title-row"><div><span class="eyebrow">ภาพตลาดล่าสุด</span><h2>ดัชนีหลัก</h2></div><span class="data-stamp" id="marketUpdated">รอข้อมูล</span></div>
-          <div class="metric-grid" id="marketMetrics"></div>
-          <div class="two-col overview-lower">
-            <article class="panel"><div class="panel-top"><div><span class="eyebrow">สัดส่วนหุ้นที่อยู่ในขาขึ้น</span><h2>ความกว้างของรายการติดตาม</h2></div><span class="coverage-tag" id="breadthUniverse">กลุ่มหุ้นที่ติดตาม</span></div><div class="breadth-layout"><div class="breadth-donut" id="breadthDonut"><strong id="breadthValue">—</strong><small>เหนือ EMA 200</small></div><div class="breadth-detail"><div><span>จำนวนหุ้นเหนือเส้น</span><b id="breadthCount">—</b></div><div class="breadth-track"><span id="breadthTrack"></span></div><small>คำนวณจากหุ้นในรายการที่มีประวัติราคาเพียงพอ ไม่ใช่หุ้นทั้งตลาด</small></div></div></article>
-            <article class="panel"><div class="panel-top"><div><span class="eyebrow">อุตสาหกรรมที่เปลี่ยนแรง</span><h2>โมเมนตัมรายอุตสาหกรรม</h2></div><button class="text-button" data-page="sectors">ดูทั้งหมด →</button></div><div id="sectorPulse" class="pulse-list"></div></article>
-          </div>
-          <div class="section-title-row"><div><span class="eyebrow">หุ้นที่คุณสนใจ</span><h2>รายการติดตาม</h2></div><button class="text-button" data-page="screener">ค้นหาหุ้นเพิ่ม →</button></div>
-          <article class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>หุ้น</th><th>ราคา</th><th>1 วัน</th><th>เทียบ EMA 200</th><th>ผลตอบแทน 20 วัน</th><th>รูปแบบ</th></tr></thead><tbody id="overviewWatchRows"></tbody></table></div><div class="empty-state hidden" id="overviewEmpty">เพิ่มชื่อย่อหุ้นในรายการติดตามหรือค้นหาหุ้นเพื่อเริ่มต้น</div></article>
         </section>
 
         <section class="page" id="page-flow" data-title="แรงซื้อขาย">
@@ -152,3 +144,4 @@
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>
+
