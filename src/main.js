@@ -103,7 +103,7 @@ function renderOverview(){
   $('#breadthValue').textContent=breadth?`${Math.round(value)}%`:'—';$('#breadthCount').textContent=breadth?`${breadth.above} / ${breadth.sample}`:'—';$('#breadthUniverse').textContent=breadth?`${breadth.sample} WATCHLIST TICKERS`:'WATCHLIST UNIVERSE';
   $('#breadthTrack').style.width=`${value}%`;$('#breadthDonut').style.background=`conic-gradient(var(--teal) 0 ${value}%,#2b3b4a ${value}% 100%)`;
   renderBrief(regime,metrics);renderNewsSummary();renderSectorPulse();renderOverviewWatch();
-  $('#marketUpdated').textContent=state.marketError?`Unavailable · ${escape(state.marketError)}`:`${state.market?.provider||'—'} · fetched ${fullTime(state.market?.fetchedAt)}`;
+  $('#marketUpdated').textContent=state.marketError?`Unavailable · ${state.marketError}`:`${state.market?.provider||'—'} · fetched ${fullTime(state.market?.fetchedAt)}`;
 }
 function renderBrief(regime,metrics){
   const items=[];
@@ -356,6 +356,7 @@ function bindEvents(){
     const page=event.target.closest('[data-page]');if(page){goPage(page.dataset.page);return;}
     const analysis=event.target.closest('[data-analysis-symbol]');if(analysis){state.analysisSymbol=analysis.dataset.analysisSymbol;$('#globalTicker').value=state.analysisSymbol;goPage('analysis');return;}
     const sector=event.target.closest('[data-sector]');if(sector){showSector(sector.dataset.sector);return;}
+    const flow=event.target.closest('[data-flow-symbol]');if(flow){state.analysisSymbol=flow.dataset.flowSymbol;$('#globalTicker').value=state.analysisSymbol;goPage('analysis');return;}
     const add=event.target.closest('[data-add-watch]');if(add){addWatch(add.dataset.addWatch);return;}
     const remove=event.target.closest('[data-remove-watch]');if(remove){removeWatch(remove.dataset.removeWatch);return;}
     const group=event.target.closest('[data-group-symbol]');if(group){editWatchGroup(group.dataset.groupSymbol);return;}
