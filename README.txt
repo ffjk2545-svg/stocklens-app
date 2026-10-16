@@ -37,3 +37,15 @@ DATA NOTES
 - The finance comparison chart is based only on values the user types in. Use the same currency, unit, and reporting period type for both columns. The text is a heuristic explanation, not accounting advice.
 - AI does not automatically read the content inside TradingView widgets. Optional pasted evidence is passed to Gemini; it should not be treated as a source of verified live facts.
 - All projections are hypothetical and not a price target or investment advice.
+
+V5 MARKET RADAR AND STOCK FINDER
+- Market Radar and Stock Finder request daily historical bars from Yahoo Finance's chart endpoint through /api/market. The endpoint calculates daily change, EMA 200, the EMA's 20-session slope, 20/50/200-session returns, and a rolling 52-week range from adjusted closes. The Yahoo ^TNX series is displayed as a percentage (for example, 5.10 means 5.10%).
+- The Market Regime is a transparent rule based on S&P 500 and Nasdaq Composite versus EMA 200 and the 20-session EMA slope. VIX at or above 30 takes precedence as High Volatility. It is a descriptive label, not an AI forecast.
+- The breadth number is the percentage above EMA 200 in the symbols sent by Stock Finder. It is not whole-market breadth. Yahoo Finance chart data is an undocumented endpoint, can be delayed or rate-limited, and should not be treated as licensed real-time exchange data.
+- Stock Finder is a technical screen only. This repository has no fundamentals data API, so it does not fabricate revenue, earnings, debt or valuation filters. TradingView financial widgets and user-entered statement comparison remain available for fundamental review.
+- Google News RSS remains the source for ticker headlines; TradingView widgets remain the source for embedded quote, chart and financial views. User-provided financial values in Earnings Decoder are clearly separate from automatically fetched data.
+
+LOCAL DEVELOPMENT AND VERIFICATION
+1. Use Node.js 20 or later and run `npm test` for the EMA and market-regime unit tests.
+2. For Vercel local development, run `npx vercel dev` from this directory. The existing /api/analyze feature still requires GEMINI_API_KEY in a local .env file or Vercel environment variables. No key is required for /api/market or /api/news.
+3. Deploy the repository root to Vercel as before. The new serverless route is /api/market; verify it at /api/market and /api/market?symbols=NVDA,AAPL after deployment. /api/health reports version 2026-10-17-v5.
