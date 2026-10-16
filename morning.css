@@ -1,0 +1,5 @@
+@media(max-width:1000px){.sidebar{position:sticky;left:auto;top:0;width:100%;height:76px;transform:none;box-shadow:0 5px 20px #1a382514}}
+@media(max-width:760px){.sidebar{position:sticky;left:auto;top:0;width:100%;height:auto;min-height:66px;transform:none;box-shadow:0 5px 20px #1a382514}}
+.mobile-nav-btn{display:none!important}
+@media(max-width:760px){.sidebar.open{transform:none}}
+
