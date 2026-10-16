@@ -1,4 +1,4 @@
-// StockLens Booji v4: latest ticker/market headlines via Google News RSS.
+// StockLens Radar: latest ticker/market headlines via Google News RSS.
 // Only headlines, publisher, timestamps and outbound links are exposed; article text is not republished.
 function xmlText(value = "") {
   return String(value)
@@ -71,7 +71,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(url, {
-      headers: { "User-Agent": "StockLensBooji/4.0 (news links and headlines)" },
+      headers: { "User-Agent": "StockLensRadar/1.0 (news links and headlines)" },
       signal: AbortSignal.timeout(9000)
     });
     if (!response.ok) {
