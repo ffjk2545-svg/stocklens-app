@@ -19,7 +19,7 @@ export async function fetchMarket(symbols = [], includeBenchmarks = false, force
   if (pending.has(cacheKey)) return pending.get(cacheKey);
   const request = fetch(url,{headers:{Accept:'application/json'},cache:force?'no-store':'default'}).then(async response=>{
     const payload=await response.json().catch(()=>({}));
-    if(!response.ok||!payload.ok)throw new Error(payload.error||`Market API returned ${response.status}`);
+    if(!response.ok||!payload.ok)throw new Error(payload.error||`โหลดข้อมูลตลาดไม่สำเร็จ (รหัส ${response.status})`);
     return {...payload,mode:'live'};
   }).finally(()=>pending.delete(cacheKey));
   pending.set(cacheKey,request);return request;
