@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0a1019">
-  <meta name="description" content="StockLens Radar — อ่านภาพตลาดและวางแผนลงทุนเป็นภาษาไทย">
-  <title>StockLens Radar — แดชบอร์ดวิเคราะห์ตลาด</title>
+  <meta name="theme-color" content="#f4f2e9">
+  <meta name="description" content="StockLens Radar — สรุปตลาดเช้าและหุ้นที่คุณติดตาม จบในหน้าเดียว">
+  <title>StockLens Radar — สแกนตลาดก่อนเริ่มวัน</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%230b1724'/%3E%3Cpath d='M8 27l8-9 6 4 10-13' fill='none' stroke='%2348ddbb' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./morning.css">
 </head>
 <body>
   <div class="app-shell">
@@ -40,17 +41,18 @@
 
       <main id="mainContent">
         <section class="page active" id="page-overview" data-title="สรุปวันนี้">
-          <div class="page-heading morning-heading"><div><p class="eyebrow">เช็กตลาดก่อนเริ่มวัน <span class="heading-dot"></span> <span id="overviewDate">วันนี้</span></p><h1>เมื่อคืนตลาดเป็นอย่างไร</h1><p>สรุปสั้น ๆ จากดัชนีหลัก ข่าว และหุ้นที่คุณติดตาม</p></div><button class="btn btn-primary" id="refreshAll">↻ อัปเดตสรุป</button></div>
+          <div class="page-heading morning-heading"><div><p class="eyebrow morning-kicker"><span class="sunrise-mark">✳</span> เช้าของนักลงทุน <span class="heading-dot"></span> <span id="overviewDate">วันนี้</span></p><h1>สแกนตลาดจบ<br><em>ก่อนกาแฟหมดแก้ว</em></h1><p>ภาพเมื่อคืน · หุ้นในเรดาร์ · เรื่องที่อาจกระทบวันนี้</p></div><button class="btn btn-primary" id="refreshAll">↻ <span>อัปเดตเช้านี้</span></button></div>
+          <section class="market-tape"><div class="market-tape-heading"><span>ปิดตลาดล่าสุด</span><small id="marketUpdated">กำลังอ่านข้อมูล</small></div><div class="metric-grid morning-metrics" id="marketMetrics"></div></section>
           <div class="morning-layout">
             <div class="morning-main">
-              <article class="panel morning-verdict"><div class="morning-verdict-head"><div><span class="eyebrow">ภาพรวมในประโยคเดียว</span><h2 id="regimeLabel">กำลังสรุปตลาด…</h2></div><span class="status-pill" id="regimeChip">ข้อมูลสาธิต</span></div><p id="regimeCopy">อิงการเปลี่ยนแปลงของดัชนีหลักและความผันผวน</p><div id="briefList" class="morning-points"></div><span id="briefStatus" class="hidden">สรุปตามกฎ</span><div id="regimeReasons" class="hidden"></div><div class="hidden"><span id="regimePressure"></span><span id="regimeScoreBar"></span></div></article>
-              <section class="morning-section"><div class="section-title-row"><div><span class="eyebrow">ตัวเลขสำคัญ</span><h2>ตลาดสหรัฐฯ ล่าสุด</h2></div><span class="data-stamp" id="marketUpdated">รอข้อมูล</span></div><div class="metric-grid morning-metrics" id="marketMetrics"></div></section>
-              <section class="morning-section"><div class="section-title-row"><div><span class="eyebrow">หุ้นที่คุณเลือกไว้</span><h2>มีอะไรขยับบ้าง</h2></div><button class="text-button" data-page="watchlist">จัดการรายการ →</button></div><article class="panel table-panel morning-watch"><div class="table-scroll"><table><thead><tr><th>หุ้น</th><th>ราคาล่าสุด</th><th>เปลี่ยนแปลง</th><th>กราฟ</th></tr></thead><tbody id="overviewWatchRows"></tbody></table></div><div class="empty-state hidden" id="overviewEmpty">ยังไม่มีหุ้นติดตาม · เพิ่มชื่อย่อจากหน้ารายการหุ้น</div></article></section>
+              <article class="panel morning-verdict"><div class="verdict-topline"><span class="eyebrow">มุมมองก่อนเริ่มวัน</span><span class="status-pill" id="regimeChip">ข้อมูลสาธิต</span></div><h2 id="regimeLabel">กำลังสรุปตลาด…</h2><p id="regimeCopy">อ่านภาพรวมตลาดจากดัชนีหลักและระดับความผันผวน</p><div id="briefList" class="morning-points"></div><span id="briefStatus" class="hidden">สรุปตามกฎ</span><div id="regimeReasons" class="hidden"></div><div class="hidden"><span id="regimePressure"></span><span id="regimeScoreBar"></span></div><span class="verdict-watermark">RADAR / 01</span></article>
+              <section class="morning-section"><div class="section-title-row"><div><span class="eyebrow">หุ้นในเรดาร์ของคุณ</span><h2>ใครเด่น ใครแผ่ว</h2></div><button class="text-button" data-page="watchlist">จัดการหุ้นที่ติดตาม <span>↗</span></button></div><div class="mover-grid" id="marketMovers"></div></section>
+              <section class="morning-section"><div class="section-title-row"><div><span class="eyebrow">ดูครบในหน้าเดียว</span><h2>รายการหุ้นของฉัน</h2></div><span class="data-stamp">สูงสุด 5 ตัวล่าสุด</span></div><article class="panel table-panel morning-watch"><div class="table-scroll"><table><thead><tr><th>ชื่อหุ้น</th><th>ราคาปิด</th><th>เปลี่ยนวันนี้</th><th>เปิดกราฟ</th></tr></thead><tbody id="overviewWatchRows"></tbody></table></div><div class="empty-state hidden" id="overviewEmpty">เพิ่มหุ้นตัวแรก แล้วสรุปความเคลื่อนไหวจะมาอยู่ตรงนี้</div></article></section>
             </div>
             <aside class="morning-side">
-              <article class="panel important-alert-panel"><div class="panel-top"><div><span class="eyebrow">เฉพาะสัญญาณที่เข้าเกณฑ์</span><h2>เรื่องที่ควรรู้</h2></div><span class="status-pill" id="importantAlertCount">กำลังตรวจ</span></div><div id="importantAlerts" class="important-alert-list"></div></article>
-              <article class="panel morning-news-panel"><div class="panel-top"><div><span class="eyebrow">อ่านต่อเมื่อมีเวลา</span><h2>ข่าวตลาด</h2></div></div><div id="newsSummary" class="news-summary"></div><p class="panel-foot">พาดหัวจากต้นทาง · เปิดอ่านเนื้อหาฉบับเต็มที่สำนักข่าว</p></article>
-              <a class="tradingview-cta" href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer"><span><b>อยากดูกราฟละเอียด?</b><small>เปิด TradingView สำหรับเครื่องมือเชิงลึก</small></span><strong>↗</strong></a>
+              <article class="panel important-alert-panel"><div class="panel-top"><div><span class="eyebrow">คัดมาเฉพาะสิ่งที่เข้าเกณฑ์</span><h2>มีอะไรต้องระวัง</h2></div><span class="status-pill" id="importantAlertCount">กำลังตรวจ</span></div><div id="importantAlerts" class="important-alert-list"></div></article>
+              <article class="panel morning-news-panel"><div class="panel-top"><div><span class="eyebrow">ข่าวสั้นก่อนออกจากบ้าน</span><h2>ประเด็นที่ตลาดพูดถึง</h2></div></div><div id="newsSummary" class="news-summary"></div><p class="panel-foot">พาดหัวและสรุปจากสำนักข่าวต้นทาง</p></article>
+              <a class="tradingview-cta" href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer"><span><b>อยากเจาะกราฟต่อ?</b><small>ดูกราฟและเครื่องมือเต็มรูปแบบใน TradingView</small></span><strong>↗</strong></a>
               <div class="morning-disclaimer">สรุปตามข้อมูลที่โหลดได้ · ไม่ใช่คำแนะนำซื้อขาย · ราคาอาจล่าช้า</div>
             </aside>
           </div>
