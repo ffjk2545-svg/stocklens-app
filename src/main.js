@@ -152,7 +152,7 @@ function setupFor(item){
 function renderOverviewWatch(){
   const items=state.watchData||[];
   $('#overviewEmpty').classList.toggle('hidden',items.length>0);
-  $('#overviewWatchRows').innerHTML=items.length?items.slice(0,5).map(item=>`<tr><td><b>${escape(item.symbol)}</b></td><td>${money(item.last)}</td><td class="${item.dailyChangePct>=0?'positive':'negative'}">${pct(item.dailyChangePct)}</td><td><a class="chart-link" href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(item.symbol)}" target="_blank" rel="noopener noreferrer">เปิดกราฟ ↗</a></td></tr>`).join(''):'<tr><td colspan="4" class="no-data">เพิ่มหุ้นที่อยากติดตาม แล้วเช็กความเคลื่อนไหวได้ที่นี่</td></tr>';
+  $('#overviewWatchRows').innerHTML=items.slice(0,5).map(item=>`<tr><td><b>${escape(item.symbol)}</b></td><td>${money(item.last)}</td><td class="${item.dailyChangePct>=0?'positive':'negative'}">${pct(item.dailyChangePct)}</td><td><a class="chart-link" href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(item.symbol)}" target="_blank" rel="noopener noreferrer">เปิดกราฟ ↗</a></td></tr>`).join('');
 }
 function translateSetup(value){return ({'Below EMA 200':'ต่ำกว่า EMA 200','Extended':'ราคายืดตัวมาก','Breakout Watch':'เฝ้าดูการทะลุกรอบ','Pullback':'ย่อตัวใกล้แนวโน้ม','Trend Strong':'แนวโน้มแข็งแรง','Base Building':'สร้างฐานราคา','Unavailable':'ไม่มีข้อมูล'})[value]||value;}
 
