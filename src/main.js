@@ -103,7 +103,7 @@ function renderOverview(){
   const keys=[['sp500','S&P 500'],['nasdaq','Nasdaq'],['vix','VIX · ความผันผวน']];
   $('#marketMetrics').innerHTML=keys.map(([key,label])=>{const m=metricValue(metrics[key],key);return `<article class="metric-card"><div class="metric-card-head"><span>${label}</span><span class="trend-arrow">${m.tone==='positive'?'↗':m.tone==='negative'?'↘':'·'}</span></div><strong>${escape(m.value)}</strong><span class="metric-change ${m.tone}">${escape(m.detail.split(' · ')[0])}</span></article>`;}).join('');
   const breadth=computeBreadth(state.watchData);
-  renderBrief(regime,metrics);renderImportantAlerts(regime,metrics,breadth);renderNewsSummary();renderOverviewWatch();
+  renderBrief(regime,metrics);renderImportantAlerts(regime,metrics,breadth);renderNewsSummary();renderOverviewWatch();renderMarketMovers();
   $('#marketUpdated').textContent=state.marketError?`ไม่มีข้อมูล · ${uiError({message:state.marketError})}`:`${state.market?.provider||'—'} · อัปเดต ${fullTime(state.market?.fetchedAt)}`;
 }
 function renderBrief(regime,metrics){
@@ -153,6 +153,15 @@ function renderOverviewWatch(){
   const items=state.watchData||[];
   $('#overviewEmpty').classList.toggle('hidden',items.length>0);
   $('#overviewWatchRows').innerHTML=items.slice(0,5).map(item=>`<tr><td><b>${escape(item.symbol)}</b></td><td>${money(item.last)}</td><td class="${item.dailyChangePct>=0?'positive':'negative'}">${pct(item.dailyChangePct)}</td><td><a class="chart-link" href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(item.symbol)}" target="_blank" rel="noopener noreferrer">เปิดกราฟ ↗</a></td></tr>`).join('');
+}
+function renderMarketMovers(){
+  const el=$('#marketMovers');
+  const items=(state.watchData||[]).filter(item=>Number.isFinite(item.dailyChangePct)&&Number.isFinite(item.last));
+  if(!items.length){el.innerHTML='<article class="mover-card mover-empty"><span class="mover-symbol">✳</span><div><b>เริ่มจากหุ้นที่คุณสนใจ</b><p>เพิ่มหุ้นในรายการติดตาม แล้วเราจะสรุปตัวที่ขยับมากที่สุดไว้ตรงนี้</p></div><button class="text-button" data-page="watchlist">เพิ่มหุ้น <span>↗</span></button></article>';return;}
+  const gain=items.reduce((best,item)=>item.dailyChangePct>best.dailyChangePct?item:best,items[0]);
+  const drop=items.reduce((worst,item)=>item.dailyChangePct<worst.dailyChangePct?item:worst,items[0]);
+  const card=(item,label,tone,icon)=>`<article class="mover-card ${tone}"><div class="mover-label"><span>${icon}</span>${label}</div><a class="mover-ticker" href="https://www.tradingview.com/chart/?symbol=${encodeURIComponent(item.symbol)}" target="_blank" rel="noopener noreferrer">${escape(item.symbol)} <i>↗</i></a><strong>${pct(item.dailyChangePct)}</strong><small>ราคาปิด ${money(item.last)} ดอลลาร์</small></article>`;
+  el.innerHTML=card(gain,'ขยับขึ้นมากสุด','mover-up','↗')+(drop.symbol===gain.symbol?'':card(drop,'อ่อนตัวมากสุด','mover-down','↘'));
 }
 function translateSetup(value){return ({'Below EMA 200':'ต่ำกว่า EMA 200','Extended':'ราคายืดตัวมาก','Breakout Watch':'เฝ้าดูการทะลุกรอบ','Pullback':'ย่อตัวใกล้แนวโน้ม','Trend Strong':'แนวโน้มแข็งแรง','Base Building':'สร้างฐานราคา','Unavailable':'ไม่มีข้อมูล'})[value]||value;}
 
